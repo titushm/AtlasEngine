@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-17
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(CreativeSpoof,Minecraft.Windows.exe,8B 81 0C 1E 00 00 83 F8 01) // should be unique
+alloc(newmem,$1000,CreativeSpoof)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+00001E0C],(byte)1
+  jmp return
+
+CreativeSpoof:
+  jmp newmem
+  nop
+return:
+registersymbol(CreativeSpoof)
+
+[DISABLE]
+
+CreativeSpoof:
+  db 8B 81 0C 1E 00 00
+
+unregistersymbol(CreativeSpoof)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1CAA694
+
+Minecraft.Windows.exe+1CAA687: CC                    - int 3 
+Minecraft.Windows.exe+1CAA688: CC                    - int 3 
+Minecraft.Windows.exe+1CAA689: CC                    - int 3 
+Minecraft.Windows.exe+1CAA68A: CC                    - int 3 
+Minecraft.Windows.exe+1CAA68B: CC                    - int 3 
+Minecraft.Windows.exe+1CAA68C: CC                    - int 3 
+Minecraft.Windows.exe+1CAA68D: CC                    - int 3 
+Minecraft.Windows.exe+1CAA68E: CC                    - int 3 
+Minecraft.Windows.exe+1CAA68F: CC                    - int 3 
+Minecraft.Windows.exe+1CAA690: 48 83 EC 28           - sub rsp,28
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1CAA694: 8B 81 0C 1E 00 00     - mov eax,[rcx+00001E0C]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1CAA69A: 83 F8 01              - cmp eax,01
+Minecraft.Windows.exe+1CAA69D: 74 21                 - je Minecraft.Windows.exe+1CAA6C0
+Minecraft.Windows.exe+1CAA69F: 83 F8 05              - cmp eax,05
+Minecraft.Windows.exe+1CAA6A2: 75 15                 - jne Minecraft.Windows.exe+1CAA6B9
+Minecraft.Windows.exe+1CAA6A4: 48 8B 89 78 03 00 00  - mov rcx,[rcx+00000378]
+Minecraft.Windows.exe+1CAA6AB: 48 8B 01              - mov rax,[rcx]
+Minecraft.Windows.exe+1CAA6AE: FF 90 98 03 00 00     - call qword ptr [rax+00000398]
+Minecraft.Windows.exe+1CAA6B4: 83 F8 01              - cmp eax,01
+Minecraft.Windows.exe+1CAA6B7: 74 07                 - je Minecraft.Windows.exe+1CAA6C0
+Minecraft.Windows.exe+1CAA6B9: 32 C0                 - xor al,al
+}
