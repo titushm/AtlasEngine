@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-06-27
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(NoFire,Minecraft.Windows.exe,89 87 C0 02 00 00 48 8B) // should be unique
+alloc(newmem,$1000,NoFire)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rdi+000002C0],0
+  jmp return
+
+NoFire:
+  jmp newmem
+  nop
+return:
+registersymbol(NoFire)
+
+[DISABLE]
+
+NoFire:
+  db 89 87 C0 02 00 00
+
+unregistersymbol(NoFire)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1C49DBC
+
+Minecraft.Windows.exe+1C49D95: 8D 0C 92                 - lea ecx,[rdx+rdx*4]
+Minecraft.Windows.exe+1C49D98: C1 E1 02                 - shl ecx,02
+Minecraft.Windows.exe+1C49D9B: 44 3B C1                 - cmp r8d,ecx
+Minecraft.Windows.exe+1C49D9E: 75 18                    - jne Minecraft.Windows.exe+1C49DB8
+Minecraft.Windows.exe+1C49DA0: 48 8B 07                 - mov rax,[rdi]
+Minecraft.Windows.exe+1C49DA3: BA 01 00 00 00           - mov edx,00000001
+Minecraft.Windows.exe+1C49DA8: 48 8B CF                 - mov rcx,rdi
+Minecraft.Windows.exe+1C49DAB: FF 90 28 04 00 00        - call qword ptr [rax+00000428]
+Minecraft.Windows.exe+1C49DB1: 44 8B 87 C0 02 00 00     - mov r8d,[rdi+000002C0]
+Minecraft.Windows.exe+1C49DB8: 41 8D 40 FF              - lea eax,[r8-01]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1C49DBC: 89 87 C0 02 00 00        - mov [rdi+000002C0],eax
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1C49DC2: 48 8B 07                 - mov rax,[rdi]
+Minecraft.Windows.exe+1C49DC5: 48 8B CF                 - mov rcx,rdi
+Minecraft.Windows.exe+1C49DC8: FF 90 30 02 00 00        - call qword ptr [rax+00000230]
+Minecraft.Windows.exe+1C49DCE: 84 C0                    - test al,al
+Minecraft.Windows.exe+1C49DD0: 74 18                    - je Minecraft.Windows.exe+1C49DEA
+Minecraft.Windows.exe+1C49DD2: F3 0F 10 87 DC 01 00 00  - movss xmm0,[rdi+000001DC]
+Minecraft.Windows.exe+1C49DDA: F3 0F 59 05 96 68 8B 01  - mulss xmm0,[Minecraft.Windows.exe+3500678]
+Minecraft.Windows.exe+1C49DE2: F3 0F 11 87 DC 01 00 00  - movss [rdi+000001DC],xmm0
+Minecraft.Windows.exe+1C49DEA: 48 8B 87 68 03 00 00     - mov rax,[rdi+00000368]
+Minecraft.Windows.exe+1C49DF1: 0F BF 48 2A              - movsx ecx,word ptr [rax+2A]
+}
