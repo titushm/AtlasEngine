@@ -1,0 +1,46 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(High_Jump,Minecraft.Windows.exe,F3 0F 11 43 1C FF)
+alloc(newmem,$1000,High_Jump)
+
+label(code)
+label(return)
+
+alloc(Value_Jump,7)
+registersymbol(Value_Jump)
+
+Value_Jump:
+  dd (float)0.5
+
+
+newmem:
+  movss [rbx+1C],xmm0
+  jmp code
+
+code:
+  push eax
+  mov eax,[Value_Jump]
+  mov [rbx+1C],eax
+  pop eax
+  jmp return
+
+High_Jump:
+  jmp newmem
+return:
+registersymbol(High_Jump)
+
+[DISABLE]
+High_Jump:
+  db F3 0F 11 43 1C
+
+unregistersymbol(High_Jump)
+dealloc(newmem)
+
+dealloc(Value_Jump)
+unregistersymbol(Value_Jump)
