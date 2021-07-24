@@ -1,0 +1,43 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(Hunger,Minecraft.Windows.exe,8B 88 84 00 00 00 89 4F)
+alloc(newmem,$1000,Hunger)
+
+label(code)
+label(return)
+
+alloc(HungerVal,20)
+registersymbol(HungerVal)
+
+HungerVal:
+  dd (float)20
+
+newmem:
+//cvttss2si ecx,[rax+00000084]
+code:
+  push ecx
+  mov ecx,[HungerVal]
+  mov [rax+00000084],ecx
+  pop ecx
+  jmp return
+
+Hunger:
+  jmp newmem
+  nop
+return:
+registersymbol(Hunger)
+
+[DISABLE]
+Hunger:
+  db 8B 88 84 00 00 00
+
+unregistersymbol(Hunger)
+dealloc(newmem)
+dealloc(HungerVal)
+unregistersymbol(HungerVal)
