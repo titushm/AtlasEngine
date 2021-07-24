@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-24
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(WaterWalk,Minecraft.Windows.exe,0F B6 80 E0 01 00 00) // should be unique
+alloc(newmem,$1000,WaterWalk)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rax+000001E0],1677747
+  jmp return
+
+WaterWalk:
+  jmp newmem
+  nop 2
+return:
+registersymbol(WaterWalk)
+
+[DISABLE]
+
+WaterWalk:
+  db 0F B6 80 E0 01 00 00
+
+unregistersymbol(WaterWalk)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1135394
+
+Minecraft.Windows.exe+113537F: CC                       - int 3 
+Minecraft.Windows.exe+1135380: 48 8B 41 10              - mov rax,[rcx+10]
+Minecraft.Windows.exe+1135384: 88 90 E0 01 00 00        - mov [rax+000001E0],dl
+Minecraft.Windows.exe+113538A: C3                       - ret 
+Minecraft.Windows.exe+113538B: CC                       - int 3 
+Minecraft.Windows.exe+113538C: CC                       - int 3 
+Minecraft.Windows.exe+113538D: CC                       - int 3 
+Minecraft.Windows.exe+113538E: CC                       - int 3 
+Minecraft.Windows.exe+113538F: CC                       - int 3 
+Minecraft.Windows.exe+1135390: 48 8B 41 10              - mov rax,[rcx+10]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1135394: 0F B6 80 E0 01 00 00     - movzx eax,byte ptr [rax+000001E0]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+113539B: C3                       - ret 
+Minecraft.Windows.exe+113539C: CC                       - int 3 
+Minecraft.Windows.exe+113539D: CC                       - int 3 
+Minecraft.Windows.exe+113539E: CC                       - int 3 
+Minecraft.Windows.exe+113539F: CC                       - int 3 
+Minecraft.Windows.exe+11353A0: 48 8B 41 10              - mov rax,[rcx+10]
+Minecraft.Windows.exe+11353A4: F3 0F 11 88 4C 02 00 00  - movss [rax+0000024C],xmm1
+Minecraft.Windows.exe+11353AC: C3                       - ret 
+Minecraft.Windows.exe+11353AD: CC                       - int 3 
+Minecraft.Windows.exe+11353AE: CC                       - int 3 
+}
