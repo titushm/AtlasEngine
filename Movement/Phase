@@ -1,0 +1,43 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(Phase,Minecraft.Windows.exe,0F 2F 99 E0 04 00 00)
+alloc(newmem,$1000,Phase)
+
+label(code)
+label(return)
+
+alloc(PhaseVal,1)
+registersymbol(PhaseVal)
+
+PhaseVal:
+  dd (float)100000
+
+newmem:
+//movss xmm0,[rcx+000004EC]
+code:
+  push eax
+  mov eax [PhaseVal]
+  mov [rcx+000004E0],eax
+  pop eax
+  jmp return
+
+Phase:
+  jmp newmem
+  nop 2
+return:
+registersymbol(Phase)
+
+[DISABLE]
+Phase:
+  db 0F 2F 99 E0 04 00 00
+
+unregistersymbol(Phase)
+dealloc(newmem)
+dealloc(PhaseVal)
+unregistersymbol(PhaseVal)
