@@ -1,0 +1,43 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(Rotations,Minecraft.Windows.exe,F3 0F 11 83 28 07 00 00 89)
+alloc(newmem,$1000,Rotations)
+
+label(code)
+label(return)
+
+alloc(RotationsVal,1)
+registersymbol(RotationsVal)
+
+RotationsVal:
+  dd (float)0
+
+newmem:
+//movss xmm0,[rcx+000004EC]
+code:
+  push ecx
+  mov ecx [RotationsVal]
+  mov [rbx+00000728],ecx
+  pop ecx
+  jmp return
+
+Rotations:
+  jmp newmem
+  nop 3
+return:
+registersymbol(Rotations)
+
+[DISABLE]
+Rotations:
+  db F3 0F 11 83 28 07 00 00
+
+unregistersymbol(Rotations)
+dealloc(newmem)
+dealloc(RotationsVal)
+unregistersymbol(RotationsVal)
