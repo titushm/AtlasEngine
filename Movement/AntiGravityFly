@@ -1,0 +1,43 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(AntiGravityFly,Minecraft.Windows.exe,F3 0F 10 82 10 05 00 00)
+alloc(newmem,$1000,AntiGravityFly)
+
+label(code)
+label(return)
+
+alloc(AntiGravityFlyVal,1)
+registersymbol(AntiGravityFlyVal)
+
+AntiGravityFlyVal:
+  dd (float)0.1
+
+newmem:
+//movss xmm0,[rcx+000004EC]
+code:
+  push ecx
+  mov ecx [AntiGravityFlyVal]
+  mov [rdx+00000510],ecx
+  pop ecx
+  jmp return
+
+AntiGravityFly:
+  jmp newmem
+  nop 3
+return:
+registersymbol(AntiGravityFly)
+
+[DISABLE]
+AntiGravityFly:
+  db F3 0F 10 82 10 05 00 00
+
+unregistersymbol(AntiGravityFly)
+dealloc(newmem)
+dealloc(AntiGravityFlyVal)
+unregistersymbol(AntiGravityFlyVal)
