@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-06-20
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Fly,Minecraft.Windows.exe,40 38 A8 C0 09 00 00) // should be unique
+alloc(newmem,$1000,Fly)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rax+000009C0],1
+  jmp return
+
+Fly:
+  jmp newmem
+  nop 2
+return:
+registersymbol(Fly)
+
+[DISABLE]
+
+Fly:
+  db 40 38 A8 C0 09 00 00
+
+unregistersymbol(Fly)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+B0C77C
+
+Minecraft.Windows.exe+B0C74D: FF 90 C8 00 00 00        - call qword ptr [rax+000000C8]
+Minecraft.Windows.exe+B0C753: F3 0F 10 35 ED 47 9F 02  - movss xmm6,[Minecraft.Windows.exe+3500F48]
+Minecraft.Windows.exe+B0C75B: 40 32 ED                 - xor bpl,bpl
+Minecraft.Windows.exe+B0C75E: 48 8B F8                 - mov rdi,rax
+Minecraft.Windows.exe+B0C761: 48 85 C0                 - test rax,rax
+Minecraft.Windows.exe+B0C764: 0F 84 EC 01 00 00        - je Minecraft.Windows.exe+B0C956
+Minecraft.Windows.exe+B0C76A: F6 80 7C 01 00 00 01     - test byte ptr [rax+0000017C],01
+Minecraft.Windows.exe+B0C771: 74 3A                    - je Minecraft.Windows.exe+B0C7AD
+Minecraft.Windows.exe+B0C773: 80 B8 BC 09 00 00 01     - cmp byte ptr [rax+000009BC],01
+Minecraft.Windows.exe+B0C77A: 74 09                    - je Minecraft.Windows.exe+B0C785
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+B0C77C: 40 38 A8 C0 09 00 00     - cmp [rax+000009C0],bpl
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+B0C783: 75 12                    - jne Minecraft.Windows.exe+B0C797
+Minecraft.Windows.exe+B0C785: 80 B8 1C 0A 00 00 01     - cmp byte ptr [rax+00000A1C],01
+Minecraft.Windows.exe+B0C78C: 74 0C                    - je Minecraft.Windows.exe+B0C79A
+Minecraft.Windows.exe+B0C78E: 40 38 A8 20 0A 00 00     - cmp [rax+00000A20],bpl
+Minecraft.Windows.exe+B0C795: 74 03                    - je Minecraft.Windows.exe+B0C79A
+Minecraft.Windows.exe+B0C797: 40 B5 01                 - mov bpl,01
+Minecraft.Windows.exe+B0C79A: 48 8B CF                 - mov rcx,rdi
+Minecraft.Windows.exe+B0C79D: E8 4E 71 24 01           - call Minecraft.Windows.exe+1D538F0
+Minecraft.Windows.exe+B0C7A2: 0F 28 F0                 - movaps xmm6,xmm0
+Minecraft.Windows.exe+B0C7A5: F3 0F 59 35 6B 48 9F 02  - mulss xmm6,[Minecraft.Windows.exe+3501018]
+}
