@@ -1,0 +1,43 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(WaterBounce,Minecraft.Windows.exe,f3 41 0f 11 47 ? 49 8b 06 49 8b ce ff 90 ? ? ? ? 84 c0 0f 84 ? ? ? ? 49 8b 1e f3 41 0f 10 7f ? f3 41 0f 10 77 ? f3 0f 58 35 ? ? ? ? 49 8b ce ff 93 ? ? ? ? f3 0f 5c 70 ? f3 41 0f 58 f5)
+alloc(newmem,$1000,WaterBounce)
+
+label(code)
+label(return)
+
+alloc(WaterBounceVal,5)
+registersymbol(WaterBounceVal)
+
+WaterBounceVal:
+  dd (float)0.3
+
+newmem:
+movss [r15+04],xmm0
+code:
+  push eax
+  mov eax,[WaterBounceVal]
+  mov [r15+04],eax
+  pop eax
+  jmp return
+
+WaterBounce:
+  jmp newmem
+  nop
+return:
+registersymbol(WaterBounce)
+
+[DISABLE]
+WaterBounce:
+  db F3 41 0F 11 47 04
+
+unregistersymbol(WaterBounce)
+dealloc(newmem)
+dealloc(WaterBounceVal)
+unregistersymbol(WaterBounceVal)
