@@ -1,0 +1,65 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(NoFall,Minecraft.Windows.exe,00 00 40 40 DB 0F) // should be unique
+alloc(newmem,$1000,NoFall)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  add [rax],al
+  inc eax
+  fisttp dword ptr [rdi]
+  jmp return
+
+NoFall:
+  jmp newmem
+  nop
+return:
+registersymbol(NoFall)
+
+[DISABLE]
+
+NoFall:
+  db 00 00 40 40 DB 0F
+
+unregistersymbol(NoFall)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+2FED0E8
+
+Minecraft.Windows.exe+2FED0D7: 40 B3 58           - mov bl,58
+Minecraft.Windows.exe+2FED0DA: 37                 - aaa 
+Minecraft.Windows.exe+2FED0DB: 40 00 00           - add [rax],al
+Minecraft.Windows.exe+2FED0DE: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0E0: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0E2: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0E4: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0E6: 3E 40              - db 3E 40 
+Minecraft.Windows.exe+2FED0E8: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0EA: 40 40              - inc eax
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+2FED0EC: DB 0F              - fisttp dword ptr [rdi]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+2FED0EE: 49 40              - inc r8
+Minecraft.Windows.exe+2FED0F0: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0F2: 00 00              - add [rax],al
+Minecraft.Windows.exe+2FED0F4: 00 80 4A 40 26 CF  - add [rax-30D9BFB6],al
+Minecraft.Windows.exe+2FED0FA: 03 0D DC A5 4C 40  - add ecx,[7FF7954276DC]
+Minecraft.Windows.exe+2FED100: 66 66 66 66 66 A6  - cmpsb 
+Minecraft.Windows.exe+2FED106: 4C 40              - inc rax
+Minecraft.Windows.exe+2FED108: CD CC              - int -34
+Minecraft.Windows.exe+2FED10A: 4C 40              - inc rax
+Minecraft.Windows.exe+2FED10C: 00 00              - add [rax],al
+}
