@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe (paused)
+  Version: 
+  Date   : 2021-06-11
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(AlwaysFly,Minecraft.Windows.exe,80 B8 C0 09 00 00 00 75 12 80 B8 1C 0A 00 00 01 74 0C) // should be unique
+alloc(newmem,$1000,AlwaysFly)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  cmp byte ptr [rax+000009C0],01
+  jmp return
+
+AlwaysFly:
+  jmp newmem
+  nop 2
+return:
+registersymbol(AlwaysFly)
+
+[DISABLE]
+
+AlwaysFly:
+  db 80 B8 C0 09 00 00 00
+
+unregistersymbol(AlwaysFly)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1050ADD
+
+Minecraft.Windows.exe+1050AC9: CC                    - int 3 
+Minecraft.Windows.exe+1050ACA: CC                    - int 3 
+Minecraft.Windows.exe+1050ACB: CC                    - int 3 
+Minecraft.Windows.exe+1050ACC: CC                    - int 3 
+Minecraft.Windows.exe+1050ACD: CC                    - int 3 
+Minecraft.Windows.exe+1050ACE: CC                    - int 3 
+Minecraft.Windows.exe+1050ACF: CC                    - int 3 
+Minecraft.Windows.exe+1050AD0: 48 8B 41 10           - mov rax,[rcx+10]
+Minecraft.Windows.exe+1050AD4: 80 B8 BC 09 00 00 01  - cmp byte ptr [rax+000009BC],01
+Minecraft.Windows.exe+1050ADB: 74 09                 - je Minecraft.Windows.exe+1050AE6
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1050ADD: 80 B8 C0 09 00 00 00  - cmp byte ptr [rax+000009C0],00
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1050AE4: 75 12                 - jne Minecraft.Windows.exe+1050AF8
+Minecraft.Windows.exe+1050AE6: 80 B8 1C 0A 00 00 01  - cmp byte ptr [rax+00000A1C],01
+Minecraft.Windows.exe+1050AED: 74 0C                 - je Minecraft.Windows.exe+1050AFB
+Minecraft.Windows.exe+1050AEF: 80 B8 20 0A 00 00 00  - cmp byte ptr [rax+00000A20],00
+Minecraft.Windows.exe+1050AF6: 74 03                 - je Minecraft.Windows.exe+1050AFB
+Minecraft.Windows.exe+1050AF8: B0 01                 - mov al,01
+Minecraft.Windows.exe+1050AFA: C3                    - ret 
+Minecraft.Windows.exe+1050AFB: 32 C0                 - xor al,al
+Minecraft.Windows.exe+1050AFD: C3                    - ret 
+Minecraft.Windows.exe+1050AFE: CC                    - int 3 
+}
