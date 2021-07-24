@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-06-11
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(SavedChunkFreelook,Minecraft.Windows.exe,80 B9 F8 26 00 00 01) // should be unique
+alloc(newmem,$1000,SavedChunkFreelook)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  cmp byte ptr [rcx+000026F8],00
+  jmp return
+
+SavedChunkFreelook:
+  jmp newmem
+  nop 2
+return:
+registersymbol(SavedChunkFreelook)
+
+[DISABLE]
+
+SavedChunkFreelook:
+  db 80 B9 F8 26 00 00 01
+
+unregistersymbol(SavedChunkFreelook)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+BFACFB
+
+Minecraft.Windows.exe+BFACD5: 48 89 74 24 18        - mov [rsp+18],rsi
+Minecraft.Windows.exe+BFACDA: 55                    - push rbp
+Minecraft.Windows.exe+BFACDB: 57                    - push rdi
+Minecraft.Windows.exe+BFACDC: 41 56                 - push r14
+Minecraft.Windows.exe+BFACDE: 48 8D 6C 24 D0        - lea rbp,[rsp-30]
+Minecraft.Windows.exe+BFACE3: 48 81 EC 30 01 00 00  - sub rsp,00000130
+Minecraft.Windows.exe+BFACEA: 48 8B 05 0F E4 DD 02  - mov rax,[Minecraft.Windows.exe+39D9100]
+Minecraft.Windows.exe+BFACF1: 48 33 C4              - xor rax,rsp
+Minecraft.Windows.exe+BFACF4: 48 89 45 20           - mov [rbp+20],rax
+Minecraft.Windows.exe+BFACF8: 48 8B D9              - mov rbx,rcx
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+BFACFB: 80 B9 F8 26 00 00 01  - cmp byte ptr [rcx+000026F8],01
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+BFAD02: 0F 85 C6 02 00 00     - jne Minecraft.Windows.exe+BFAFCE
+Minecraft.Windows.exe+BFAD08: 80 79 18 00           - cmp byte ptr [rcx+18],00
+Minecraft.Windows.exe+BFAD0C: 0F 84 E0 02 00 00     - je Minecraft.Windows.exe+BFAFF2
+Minecraft.Windows.exe+BFAD12: 48 8B 41 08           - mov rax,[rcx+08]
+Minecraft.Windows.exe+BFAD16: 48 8B 08              - mov rcx,[rax]
+Minecraft.Windows.exe+BFAD19: 8B 43 10              - mov eax,[rbx+10]
+Minecraft.Windows.exe+BFAD1C: 89 44 24 20           - mov [rsp+20],eax
+Minecraft.Windows.exe+BFAD20: 48 8D 54 24 20        - lea rdx,[rsp+20]
+Minecraft.Windows.exe+BFAD25: E8 A6 25 04 00        - call Minecraft.Windows.exe+C3D2D0
+Minecraft.Windows.exe+BFAD2A: 48 8B F8              - mov rdi,rax
+}
