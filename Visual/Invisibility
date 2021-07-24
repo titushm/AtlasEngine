@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-06-23
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Invis,Minecraft.Windows.exe,0F 2F 99 E0 04 00 00) // should be unique
+alloc(newmem,$1000,Invis)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+000004E0],(float)100000
+  jmp return
+
+Invis:
+  jmp newmem
+  nop 2
+return:
+registersymbol(Invis)
+
+[DISABLE]
+
+Invis:
+  db 0F 2F 99 E0 04 00 00
+
+unregistersymbol(Invis)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1C5171A
+
+Minecraft.Windows.exe+1C516EC: F3 0F 10 2A           - movss xmm5,[rdx]
+Minecraft.Windows.exe+1C516F0: F3 0F 10 5A 04        - movss xmm3,[rdx+04]
+Minecraft.Windows.exe+1C516F5: F3 0F 10 4A 08        - movss xmm1,[rdx+08]
+Minecraft.Windows.exe+1C516FA: F3 41 0F 10 60 04     - movss xmm4,[r8+04]
+Minecraft.Windows.exe+1C51700: F3 41 0F 10 50 08     - movss xmm2,[r8+08]
+Minecraft.Windows.exe+1C51706: 73 30                 - jae Minecraft.Windows.exe+1C51738
+Minecraft.Windows.exe+1C51708: 0F 2F A9 DC 04 00 00  - comiss xmm5,[rcx+000004DC]
+Minecraft.Windows.exe+1C5170F: 73 27                 - jae Minecraft.Windows.exe+1C51738
+Minecraft.Windows.exe+1C51711: 0F 2F A1 D4 04 00 00  - comiss xmm4,[rcx+000004D4]
+Minecraft.Windows.exe+1C51718: 76 1E                 - jna Minecraft.Windows.exe+1C51738
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1C5171A: 0F 2F 99 E0 04 00 00  - comiss xmm3,[rcx+000004E0]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1C51721: 73 15                 - jae Minecraft.Windows.exe+1C51738
+Minecraft.Windows.exe+1C51723: 0F 2F 91 D8 04 00 00  - comiss xmm2,[rcx+000004D8]
+Minecraft.Windows.exe+1C5172A: 76 0C                 - jna Minecraft.Windows.exe+1C51738
+Minecraft.Windows.exe+1C5172C: 0F 2F 89 E4 04 00 00  - comiss xmm1,[rcx+000004E4]
+Minecraft.Windows.exe+1C51733: 73 03                 - jae Minecraft.Windows.exe+1C51738
+Minecraft.Windows.exe+1C51735: B0 01                 - mov al,01
+Minecraft.Windows.exe+1C51737: C3                    - ret 
+Minecraft.Windows.exe+1C51738: 32 C0                 - xor al,al
+Minecraft.Windows.exe+1C5173A: C3                    - ret 
+Minecraft.Windows.exe+1C5173B: CC                    - int 3 
+}
