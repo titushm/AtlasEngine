@@ -1,0 +1,62 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-17
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(RiptideSpoof,Minecraft.Windows.exe,F3 0F 10 51 3C 48) // should be unique
+alloc(newmem,$1000,RiptideSpoof)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+3C],(float)1
+  jmp return
+
+RiptideSpoof:
+  jmp newmem
+return:
+registersymbol(RiptideSpoof)
+
+[DISABLE]
+
+RiptideSpoof:
+  db F3 0F 10 51 3C
+
+unregistersymbol(RiptideSpoof)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+241473A
+
+Minecraft.Windows.exe+2414712: F3 0F 11 49 34           - movss [rcx+34],xmm1
+Minecraft.Windows.exe+2414717: F3 0F 11 41 40           - movss [rcx+40],xmm0
+Minecraft.Windows.exe+241471C: 76 09                    - jna Minecraft.Windows.exe+2414727
+Minecraft.Windows.exe+241471E: F3 0F 58 C3              - addss xmm0,xmm3
+Minecraft.Windows.exe+2414722: 0F 2F D0                 - comiss xmm2,xmm0
+Minecraft.Windows.exe+2414725: EB 07                    - jmp Minecraft.Windows.exe+241472E
+Minecraft.Windows.exe+2414727: F3 0F 5C C3              - subss xmm0,xmm3
+Minecraft.Windows.exe+241472B: 0F 2F C2                 - comiss xmm0,xmm2
+Minecraft.Windows.exe+241472E: F3 0F 10 2D 5A 8E 1B 01  - movss xmm5,[Minecraft.Windows.exe+35CD590]
+Minecraft.Windows.exe+2414736: 48 0F 46 C2              - cmovbe rax,rdx
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+241473A: F3 0F 10 51 3C           - movss xmm2,[rcx+3C]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+241473F: 48 8D 51 3C              - lea rdx,[rcx+3C]
+Minecraft.Windows.exe+2414743: 0F 2F D1                 - comiss xmm2,xmm1
+Minecraft.Windows.exe+2414746: F3 0F 11 44 24 08        - movss [rsp+08],xmm0
+Minecraft.Windows.exe+241474C: 0F 57 E4                 - xorps xmm4,xmm4
+Minecraft.Windows.exe+241474F: F3 0F 10 00              - movss xmm0,[rax]
+Minecraft.Windows.exe+2414753: 48 8D 44 24 10           - lea rax,[rsp+10]
+Minecraft.Windows.exe+2414758: F3 0F 5F C4              - maxss xmm0,xmm4
+Minecraft.Windows.exe+241475C: F3 0F 5D C5              - minss xmm0,xmm5
+Minecraft.Windows.exe+2414760: F3 0F 11 41 44           - movss [rcx+44],xmm0
+Minecraft.Windows.exe+2414765: 76 09                    - jna Minecraft.Windows.exe+2414770
+}
