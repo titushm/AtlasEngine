@@ -1,0 +1,43 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(Health,Minecraft.Windows.exe,F3 0F 2C 88 84 00 00 00 85 C9 7E 07)
+alloc(newmem,$1000,Health)
+
+label(code)
+label(return)
+
+alloc(HealthVal,20)
+registersymbol(HealthVal)
+
+HealthVal:
+  dd (float)20
+
+newmem:
+cvttss2si ecx,[rax+00000084]
+code:
+  push ecx
+  mov ecx,[HealthVal]
+  mov [rax+00000084],ecx
+  pop ecx
+  jmp return
+
+Health:
+  jmp newmem
+  nop 3
+return:
+registersymbol(Health)
+
+[DISABLE]
+Health:
+  db F3 0F 2C 88 84 00 00 00
+
+unregistersymbol(Health)
+dealloc(newmem)
+dealloc(HealthVal)
+unregistersymbol(HealthVal)
