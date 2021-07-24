@@ -1,0 +1,62 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-03
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(FullBright,Minecraft.Windows.exe,F3 0F 10 42 18 48 83 C4 28 C3 41 B8 25) // should be unique
+alloc(newmem,$1000,FullBright)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rdx+18],(float)100
+  jmp return
+
+FullBright:
+  jmp newmem
+return:
+registersymbol(FullBright)
+
+[DISABLE]
+
+FullBright:
+  db F3 0F 10 42 18
+
+unregistersymbol(FullBright)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+B8EF40
+
+Minecraft.Windows.exe+B8EF1E: 48 8B 10              - mov rdx,[rax]
+Minecraft.Windows.exe+B8EF21: 48 85 D2              - test rdx,rdx
+Minecraft.Windows.exe+B8EF24: 74 3B                 - je Minecraft.Windows.exe+B8EF61
+Minecraft.Windows.exe+B8EF26: 48 8B 42 08           - mov rax,[rdx+08]
+Minecraft.Windows.exe+B8EF2A: 48 8B 88 00 02 00 00  - mov rcx,[rax+00000200]
+Minecraft.Windows.exe+B8EF31: 48 85 C9              - test rcx,rcx
+Minecraft.Windows.exe+B8EF34: 74 0A                 - je Minecraft.Windows.exe+B8EF40
+Minecraft.Windows.exe+B8EF36: E8 C5 01 9C 00        - call Minecraft.Windows.exe+154F100
+Minecraft.Windows.exe+B8EF3B: 48 83 C4 28           - add rsp,28
+Minecraft.Windows.exe+B8EF3F: C3                    - ret 
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+B8EF40: F3 0F 10 42 18        - movss xmm0,[rdx+18]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+B8EF45: 48 83 C4 28           - add rsp,28
+Minecraft.Windows.exe+B8EF49: C3                    - ret 
+Minecraft.Windows.exe+B8EF4A: 41 B8 25 00 00 00     - mov r8d,00000025
+Minecraft.Windows.exe+B8EF50: FF 50 58              - call qword ptr [rax+58]
+Minecraft.Windows.exe+B8EF53: 48 8B 10              - mov rdx,[rax]
+Minecraft.Windows.exe+B8EF56: 48 85 D2              - test rdx,rdx
+Minecraft.Windows.exe+B8EF59: 75 CB                 - jne Minecraft.Windows.exe+B8EF26
+Minecraft.Windows.exe+B8EF5B: E8 50 50 B0 FF        - call Minecraft.Windows.exe+693FB0
+Minecraft.Windows.exe+B8EF60: CC                    - int 3 
+Minecraft.Windows.exe+B8EF61: E8 4A 50 B0 FF        - call Minecraft.Windows.exe+693FB0
+}
