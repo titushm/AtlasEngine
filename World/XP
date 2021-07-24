@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-06-11
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(XP,Minecraft.Windows.exe,0F 2E BF 84 00 00 00) // should be unique
+alloc(newmem,$1000,XP)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rdi+00000084],(float)50
+  jmp return
+
+XP:
+  jmp newmem
+  nop 2
+return:
+registersymbol(XP)
+
+[DISABLE]
+
+XP:
+  db 0F 2E BF 84 00 00 00
+
+unregistersymbol(XP)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1EB9AB8
+
+Minecraft.Windows.exe+1EB9A89: 0F 85 21 FF FF FF        - jne Minecraft.Windows.exe+1EB99B0
+Minecraft.Windows.exe+1EB9A8F: 48 8B B4 24 88 00 00 00  - mov rsi,[rsp+00000088]
+Minecraft.Windows.exe+1EB9A97: 0F 28 74 24 50           - movaps xmm6,[rsp+50]
+Minecraft.Windows.exe+1EB9A9C: 48 8B 4F 60              - mov rcx,[rdi+60]
+Minecraft.Windows.exe+1EB9AA0: 48 8B AC 24 80 00 00 00  - mov rbp,[rsp+00000080]
+Minecraft.Windows.exe+1EB9AA8: 48 8B 5C 24 78           - mov rbx,[rsp+78]
+Minecraft.Windows.exe+1EB9AAD: 48 85 C9                 - test rcx,rcx
+Minecraft.Windows.exe+1EB9AB0: 74 06                    - je Minecraft.Windows.exe+1EB9AB8
+Minecraft.Windows.exe+1EB9AB2: 48 8B 01                 - mov rax,[rcx]
+Minecraft.Windows.exe+1EB9AB5: FF 50 08                 - call qword ptr [rax+08]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1EB9AB8: 0F 2E BF 84 00 00 00     - ucomiss xmm7,[rdi+00000084]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1EB9ABF: 0F 28 7C 24 40           - movaps xmm7,[rsp+40]
+Minecraft.Windows.exe+1EB9AC4: 74 45                    - je Minecraft.Windows.exe+1EB9B0B
+Minecraft.Windows.exe+1EB9AC6: 48 8B 57 10              - mov rdx,[rdi+10]
+Minecraft.Windows.exe+1EB9ACA: 80 7A 01 00              - cmp byte ptr [rdx+01],00
+Minecraft.Windows.exe+1EB9ACE: 74 3B                    - je Minecraft.Windows.exe+1EB9B0B
+Minecraft.Windows.exe+1EB9AD0: 48 8B 47 08              - mov rax,[rdi+08]
+Minecraft.Windows.exe+1EB9AD4: 48 8D 48 40              - lea rcx,[rax+40]
+Minecraft.Windows.exe+1EB9AD8: 48 89 44 24 28           - mov [rsp+28],rax
+Minecraft.Windows.exe+1EB9ADD: 8B 42 04                 - mov eax,[rdx+04]
+Minecraft.Windows.exe+1EB9AE0: 48 8B 51 08              - mov rdx,[rcx+08]
+}
