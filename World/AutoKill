@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Speed,Minecraft.Windows.exe,F3 0F 10 B9 84 00 00 00) // should be unique
+alloc(newmem,$1000,Speed)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+00000084],(Float)0.100
+  jmp return
+
+Speed:
+  jmp newmem
+  nop 3
+return:
+registersymbol(Speed)
+
+[DISABLE]
+
+Speed:
+  db F3 0F 10 B9 84 00 00 00
+
+unregistersymbol(Speed)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1B760E5
+
+Minecraft.Windows.exe+1B760B8: 48 8B 41 38                    - mov rax,[rcx+38]
+Minecraft.Windows.exe+1B760BC: 48 8B F9                       - mov rdi,rcx
+Minecraft.Windows.exe+1B760BF: 49 89 5B 10                    - mov [r11+10],rbx
+Minecraft.Windows.exe+1B760C3: 48 8B 59 30                    - mov rbx,[rcx+30]
+Minecraft.Windows.exe+1B760C7: 48 2B C3                       - sub rax,rbx
+Minecraft.Windows.exe+1B760CA: 49 89 6B 18                    - mov [r11+18],rbp
+Minecraft.Windows.exe+1B760CE: 48 C1 F8 03                    - sar rax,03
+Minecraft.Windows.exe+1B760D2: 48 BD C5 4E EC C4 4E EC C4 4E  - mov rbp,4EC4EC4EC4EC4EC5
+Minecraft.Windows.exe+1B760DC: 48 0F AF C5                    - imul rax,rbp
+Minecraft.Windows.exe+1B760E0: 0F 29 7C 24 40                 - movaps [rsp+40],xmm7
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1B760E5: F3 0F 10 B9 84 00 00 00        - movss xmm7,[rcx+00000084]
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1B760ED: 48 85 C0                       - test rax,rax
+Minecraft.Windows.exe+1B760F0: 0F 84 06 01 00 00              - je Minecraft.Windows.exe+1B761FC
+Minecraft.Windows.exe+1B760F6: 48 3B 59 38                    - cmp rbx,[rcx+38]
+Minecraft.Windows.exe+1B760FA: 0F 84 FC 00 00 00              - je Minecraft.Windows.exe+1B761FC
+Minecraft.Windows.exe+1B76100: 49 89 73 20                    - mov [r11+20],rsi
+Minecraft.Windows.exe+1B76104: 0F 29 74 24 50                 - movaps [rsp+50],xmm6
+Minecraft.Windows.exe+1B76109: 0F 1F 80 00 00 00 00           - nop dword ptr [rax+00000000]
+Minecraft.Windows.exe+1B76110: 48 8B 03                       - mov rax,[rbx]
+Minecraft.Windows.exe+1B76113: 48 8B CB                       - mov rcx,rbx
+Minecraft.Windows.exe+1B76116: FF 43 5C                       - inc [rbx+5C]
+}
