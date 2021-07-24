@@ -1,0 +1,32 @@
+{
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+[ENABLE]
+aobscanmodule(Bhop,Minecraft.Windows.exe,c7 40 ? ? ? ? ? 48 83 c4 ? c3 cc cc cc cc 48 89 5c 24)
+alloc(newmem,$1000,Bhop)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rax+1C],3F000000
+  jmp return
+
+Bhop:
+  jmp newmem
+  nop 2
+return:
+registersymbol(Bhop)
+
+[DISABLE]
+Bhop:
+  db C7 40 1C 00 00 00 00
+
+unregistersymbol(Bhop)
+dealloc(newmem)
