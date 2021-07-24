@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-24
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(AirJump,Minecraft.Windows.exe,80 B8 E0 01 00 00 00 75 0F) // should be unique
+alloc(newmem,$1000,AirJump)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rax+000001E0],16777473
+  jmp return
+
+AirJump:
+  jmp newmem
+  nop 2
+return:
+registersymbol(AirJump)
+
+[DISABLE]
+
+AirJump:
+  db 80 B8 E0 01 00 00 00
+
+unregistersymbol(AirJump)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+13717BD
+
+Minecraft.Windows.exe+1371794: 48 85 C0              - test rax,rax
+Minecraft.Windows.exe+1371797: 74 3C                 - je Minecraft.Windows.exe+13717D5
+Minecraft.Windows.exe+1371799: 80 B8 BC 09 00 00 01  - cmp byte ptr [rax+000009BC],01
+Minecraft.Windows.exe+13717A0: 74 09                 - je Minecraft.Windows.exe+13717AB
+Minecraft.Windows.exe+13717A2: 80 B8 C0 09 00 00 00  - cmp byte ptr [rax+000009C0],00
+Minecraft.Windows.exe+13717A9: 75 2A                 - jne Minecraft.Windows.exe+13717D5
+Minecraft.Windows.exe+13717AB: 80 B8 1C 0A 00 00 01  - cmp byte ptr [rax+00000A1C],01
+Minecraft.Windows.exe+13717B2: 74 09                 - je Minecraft.Windows.exe+13717BD
+Minecraft.Windows.exe+13717B4: 80 B8 20 0A 00 00 00  - cmp byte ptr [rax+00000A20],00
+Minecraft.Windows.exe+13717BB: 75 18                 - jne Minecraft.Windows.exe+13717D5
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+13717BD: 80 B8 E0 01 00 00 00  - cmp byte ptr [rax+000001E0],00
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+13717C4: 75 0F                 - jne Minecraft.Windows.exe+13717D5
+Minecraft.Windows.exe+13717C6: 48 8B C8              - mov rcx,rax
+Minecraft.Windows.exe+13717C9: E8 A2 56 98 00        - call Minecraft.Windows.exe+1CF6E70
+Minecraft.Windows.exe+13717CE: 84 C0                 - test al,al
+Minecraft.Windows.exe+13717D0: 75 03                 - jne Minecraft.Windows.exe+13717D5
+Minecraft.Windows.exe+13717D2: 88 43 11              - mov [rbx+11],al
+Minecraft.Windows.exe+13717D5: 45 0F B6 77 60        - movzx r14d,byte ptr [r15+60]
+Minecraft.Windows.exe+13717DA: 44 3A B3 90 07 00 00  - cmp r14l,[rbx+00000790]
+Minecraft.Windows.exe+13717E1: 0F 84 84 00 00 00     - je Minecraft.Windows.exe+137186B
+Minecraft.Windows.exe+13717E7: 48 8B 8B B8 01 00 00  - mov rcx,[rbx+000001B8]
+}
