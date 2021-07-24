@@ -1,0 +1,64 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(InstaBreak,Minecraft.Windows.exe,F3 0F 11 4B 24 33) // should be unique
+alloc(newmem,$1000,InstaBreak)
+
+label(code)
+label(return)
+
+newmem:
+movss [rbx+24],xmm1
+jmp code
+
+code:
+  mov [rbx+24],(float)1
+  jmp return
+
+InstaBreak:
+  jmp newmem
+return:
+registersymbol(InstaBreak)
+
+[DISABLE]
+
+InstaBreak:
+  db F3 0F 11 4B 24
+
+unregistersymbol(InstaBreak)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+17F1ABA
+
+Minecraft.Windows.exe+17F1A91: 0F 57 F6                          - xorps xmm6,xmm6
+Minecraft.Windows.exe+17F1A94: F2 0F 5A F0                       - cvtsd2ss xmm6,xmm0
+Minecraft.Windows.exe+17F1A98: F3 0F 59 35 24 B8 7F 01           - mulss xmm6,[Minecraft.Windows.exe+2FED2C4]
+Minecraft.Windows.exe+17F1AA0: 49 8B D5                          - mov rdx,r13
+Minecraft.Windows.exe+17F1AA3: 48 8B CB                          - mov rcx,rbx
+Minecraft.Windows.exe+17F1AA6: E8 15 2A 00 00                    - call Minecraft.Windows.exe+17F44C0
+Minecraft.Windows.exe+17F1AAB: 0F 28 F8                          - movaps xmm7,xmm0
+Minecraft.Windows.exe+17F1AAE: 0F 28 C8                          - movaps xmm1,xmm0
+Minecraft.Windows.exe+17F1AB1: F3 0F 59 CE                       - mulss xmm1,xmm6
+Minecraft.Windows.exe+17F1AB5: F3 0F 58 4B 24                    - addss xmm1,[rbx+24]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+17F1ABA: F3 0F 11 4B 24                    - movss [rbx+24],xmm1
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+17F1ABF: 33 F6                             - xor esi,esi
+Minecraft.Windows.exe+17F1AC1: 48 8B 45 10                       - mov rax,[rbp+10]
+Minecraft.Windows.exe+17F1AC5: 48 39 43 68                       - cmp [rbx+68],rax
+Minecraft.Windows.exe+17F1AC9: 0F 8D 05 01 00 00                 - jnl Minecraft.Windows.exe+17F1BD4
+Minecraft.Windows.exe+17F1ACF: 48 69 8B 80 00 00 00 40 42 0F 00  - imul rcx,[rbx+00000080],000F4240
+Minecraft.Windows.exe+17F1ADA: 48 03 C8                          - add rcx,rax
+Minecraft.Windows.exe+17F1ADD: 48 89 4B 68                       - mov [rbx+68],rcx
+Minecraft.Windows.exe+17F1AE1: 48 8B 53 08                       - mov rdx,[rbx+08]
+Minecraft.Windows.exe+17F1AE5: 48 8B 8A 58 03 00 00              - mov rcx,[rdx+00000358]
+Minecraft.Windows.exe+17F1AEC: 48 8B 01                          - mov rax,[rcx]
+}
