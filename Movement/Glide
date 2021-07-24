@@ -1,0 +1,70 @@
+{ Game   : Minecraft.Windows.exe
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Glide,Minecraft.Windows.exe,F3 41 0F 11 47 04 49 8B 06 49 8B CE FF 90 30) // should be unique
+alloc(newmem,$1000,Glide)
+
+label(code)
+label(return)
+
+newmem:
+
+  cmp [r15+04],(float)0
+  jl Glidefall
+
+code:
+  movss [r15+04],xmm0
+  jmp return
+
+Glidefall:
+  mov [r15+04],(float)-0.1
+  jmp return
+
+Glide:
+  jmp newmem
+  nop
+return:
+registersymbol(Glide)
+
+[DISABLE]
+
+Glide:
+  db F3 41 0F 11 47 04
+
+unregistersymbol(Glide)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1D50CFF
+
+Minecraft.Windows.exe+1D50CCB: F3 41 0F 10 47 04        - movss xmm0,[r15+04]
+Minecraft.Windows.exe+1D50CD1: F3 0F 5C 05 CF F4 7A 01  - subss xmm0,[Minecraft.Windows.exe+35001A8]
+Minecraft.Windows.exe+1D50CD9: F3 41 0F 11 47 04        - movss [r15+04],xmm0
+Minecraft.Windows.exe+1D50CDF: 49 8B 06                 - mov rax,[r14]
+Minecraft.Windows.exe+1D50CE2: 41 0F 28 C9              - movaps xmm1,xmm9
+Minecraft.Windows.exe+1D50CE6: 49 8B CE                 - mov rcx,r14
+Minecraft.Windows.exe+1D50CE9: FF 90 58 02 00 00        - call qword ptr [rax+00000258]
+Minecraft.Windows.exe+1D50CEF: EB 14                    - jmp Minecraft.Windows.exe+1D50D05
+Minecraft.Windows.exe+1D50CF1: F3 41 0F 10 47 04        - movss xmm0,[r15+04]
+Minecraft.Windows.exe+1D50CF7: F3 0F 5C 05 55 F6 7A 01  - subss xmm0,[Minecraft.Windows.exe+3500354]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1D50CFF: F3 41 0F 11 47 04        - movss [r15+04],xmm0
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1D50D05: 49 8B 06                 - mov rax,[r14]
+Minecraft.Windows.exe+1D50D08: 49 8B CE                 - mov rcx,r14
+Minecraft.Windows.exe+1D50D0B: FF 90 30 04 00 00        - call qword ptr [rax+00000430]
+Minecraft.Windows.exe+1D50D11: 84 C0                    - test al,al
+Minecraft.Windows.exe+1D50D13: 75 4D                    - jne Minecraft.Windows.exe+1D50D62
+Minecraft.Windows.exe+1D50D15: 84 DB                    - test bl,bl
+Minecraft.Windows.exe+1D50D17: 75 29                    - jne Minecraft.Windows.exe+1D50D42
+Minecraft.Windows.exe+1D50D19: 49 8B 06                 - mov rax,[r14]
+Minecraft.Windows.exe+1D50D1C: BA 30 00 00 00           - mov edx,00000030
+Minecraft.Windows.exe+1D50D21: 49 8B CE                 - mov rcx,r14
+}
