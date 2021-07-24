@@ -1,0 +1,135 @@
+PROCESS_NAME = 'minecraft.windows.exe'
+
+function Dev()
+ shellExecute('https://discord.com/users/430427104786644993/')
+end
+
+function AttachProcess()
+   openProcess(process_name)
+if getProcessIDFromProcessName(PROCESS_NAME) ~= nil then
+      openProcess(PROCESS_NAME)
+	  Attach.ShowHint = true
+	  Attach.Enabled = true
+      Attach.Caption = 'Re-Attach!'
+      Loaded.Visible = true
+   else
+      showMessage("Cant find Minecraft process.\rMake sure Minecraft is running!")
+   end
+end
+
+function ArraylistToggle()
+if ArraylistOnOff.Checked then
+Arraylist.visible = false
+else
+Arraylist.visible = false
+end
+end
+
+
+Arraylist.setLayeredAttributes(0xFF00FF, 240, 1)
+Arraylist.visible = false
+--------------------
+--
+---- getMainForm()
+--------------------
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel4.Visible    = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+getMainForm().caption = "AtlasClient by TitusHM#0016"
+
+
+--------------------
+--
+---- Panel
+--------------------
+TheSplitter = createSplitter(getMainForm())
+TheSplitter.Align = alRight
+
+
+--------------------
+--
+---- Panel
+--------------------
+CEPanel1 = createPanel(getMainForm())
+CEPanel1.Width = 180
+CEPanel1.Align = alRight
+CEPanel1.Caption = ''
+--------------------
+--
+---- Download
+--------------------
+Download = createButton(CEPanel1)
+Download.Left = 10
+Download.Top = 170
+Download.Width = 160
+Download.Height = 25
+Download.Caption = 'AtlasClient Dev'
+Download.onClick = Dev
+
+
+--------------------
+--
+---- Attach
+--------------------
+Attach = createButton(CEPanel1)
+Attach.Left = 15
+Attach.Height = 80
+Attach.Hint = 'Restart Cheat Engine\nto attach'
+Attach.Top = 10
+Attach.Width = 150
+Attach.Caption = 'Attach to Game'
+Attach.ShowHint = false
+Attach.onClick = AttachProcess
+
+
+--------------------
+--
+---- Loaded
+--------------------
+Loaded = createLabel(CEPanel1)
+Loaded.Left = 18
+Loaded.Top = 95
+Loaded.Visible = false
+Loaded.Caption = ''
+Loaded.Font.Color=0x008000
+Loaded.Font.Size=10
+--------------------
+------------------------------
+---- END FORM: getMainForm()
+----
+--
+
+--------------------
+--
+---- CELabel1
+--------------------
+Credits = createLabel(CEPanel1)
+Credits.Left = 50
+Credits.Top = 175
+Credits.Caption = ''
+Credits.Font.Size=10
+--
+---- Arraylist
+--------------------
+
+ArraylistOnOff = createCheckBox(CEPanel1)
+ArraylistOnOff.Left = 15
+ArraylistOnOff.Top = 120
+ArraylistOnOff.Caption = 'Show UI'
+ArraylistOnOff.Font.Size=10
+ArraylistOnOff.onChange = ArraylistToggle
+
+--------------------
+------------------------------
+---- END FORM: getMainForm()
+----
+--
+
+local int = getInternet()
+local ICO = int.getURL("https://cdn.discordapp.com/attachments/721278292019118102/867141796085628958/AtlasClientIcon64.png")
+local IM = createStringStream(ICO)
+int.Destroy()
+local Pic = createPicture()
+Pic.loadFromStream(IM)
+local Bit = Pic.getBitmap()
+getApplication().Icon = Bit
+
+
