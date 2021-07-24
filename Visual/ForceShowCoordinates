@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version:
+  Date   : 2021-05-23
+  Author : titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(InvisSee,Minecraft.Windows.exe,0F B6 40 10 C0 E8 05 24 01 C3 32 C0 C3 CC CC CC CC CC) // should be unique
+alloc(newmem,$1000,InvisSee)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov eax,0
+  shr al,05
+  jmp return
+
+InvisSee:
+  jmp newmem
+  nop 2
+return:
+registersymbol(InvisSee)
+
+[DISABLE]
+
+InvisSee:
+  db 0F B6 40 10 C0 E8 05
+
+unregistersymbol(InvisSee)
+dealloc(newmem)
+
+{
+
+Minecraft.Windows.exe+1C56FC0: 48 8B 91 80 01 00 00  - mov rdx,[rcx+00000180]
+Minecraft.Windows.exe+1C56FC7: 48 8B 81 88 01 00 00  - mov rax,[rcx+00000188]
+Minecraft.Windows.exe+1C56FCE: 33 C9                 - xor ecx,ecx
+Minecraft.Windows.exe+1C56FD0: 48 2B C2              - sub rax,rdx
+Minecraft.Windows.exe+1C56FD3: 48 C1 F8 03           - sar rax,03
+Minecraft.Windows.exe+1C56FD7: 66 3B C8              - cmp cx,ax
+Minecraft.Windows.exe+1C56FDA: 73 12                 - jae Minecraft.Windows.exe+1C56FEE
+Minecraft.Windows.exe+1C56FDC: 48 8B 02              - mov rax,[rdx]
+Minecraft.Windows.exe+1C56FDF: 48 85 C0              - test rax,rax
+Minecraft.Windows.exe+1C56FE2: 74 0A                 - je Minecraft.Windows.exe+1C56FEE
+// ---------- InvisSeeING HERE ----------
+Minecraft.Windows.exe+1C56FE4: 0F B6 40 10           - movzx eax,byte ptr [rax+10]
+// ---------- DONE InvisSeeING  ----------
+Minecraft.Windows.exe+1C56FE8: C0 E8 05              - shr al,05
+Minecraft.Windows.exe+1C56FEB: 24 01                 - and al,01
+Minecraft.Windows.exe+1C56FED: C3                    - ret
+Minecraft.Windows.exe+1C56FEE: 32 C0                 - xor al,al
+Minecraft.Windows.exe+1C56FF0: C3                    - ret
+Minecraft.Windows.exe+1C56FF1: CC                    - int 3
+Minecraft.Windows.exe+1C56FF2: CC                    - int 3
+Minecraft.Windows.exe+1C56FF3: CC                    - int 3
+Minecraft.Windows.exe+1C56FF4: CC                    - int 3
+Minecraft.Windows.exe+1C56FF5: CC                    - int 3
+}
