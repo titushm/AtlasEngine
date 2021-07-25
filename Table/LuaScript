@@ -115,7 +115,7 @@ ArraylistOnOff.Left = 15
 ArraylistOnOff.Top = 120
 ArraylistOnOff.Caption = 'Show UI'
 ArraylistOnOff.Font.Size=10
-ArraylistOnOff.onChange = ArraylistToggle
+ArraylistOnOff.onChange = showMessage("Thanks to fligger and his Project Genesis Table For the UI ")
 
 --------------------
 ------------------------------
