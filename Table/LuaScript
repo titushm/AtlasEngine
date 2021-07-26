@@ -1,8 +1,25 @@
 PROCESS_NAME = 'minecraft.windows.exe'
 
+openProcess(PROCESS_NAME)
+
+if getProcessIDFromProcessName(PROCESS_NAME) ~= nil then
+showMessage("Automatically Connected To Game")
+
+else
+
+showMessage("Couldnt Automatically Connect To Game.\rConnect Manually")
+
+end
+
+
 function Dev()
  shellExecute('https://discord.com/users/430427104786644993/')
 end
+
+function UICredits()
+showMessage("Thanks to fligger and his Project Genesis Table For the UI ")
+end
+
 
 function AttachProcess()
    openProcess(process_name)
@@ -24,8 +41,8 @@ else
 Arraylist.visible = false
 end
 end
-
-
+PROCESS_NAME = 'minecraft.windows.exe'
+:: here ::
 Arraylist.setLayeredAttributes(0xFF00FF, 240, 1)
 Arraylist.visible = false
 --------------------
@@ -64,7 +81,14 @@ Download.Height = 25
 Download.Caption = 'AtlasClient Dev'
 Download.onClick = Dev
 
-
+--------------------
+Credits = createButton(CEPanel1)
+Credits.Left = 10
+Credits.Top = 200
+Credits.Width = 160
+Credits.Height = 25
+Credits.Caption = 'Credits'
+Credits.onClick = UICredits
 --------------------
 --
 ---- Attach
@@ -75,11 +99,13 @@ Attach.Height = 80
 Attach.Hint = 'Restart Cheat Engine\nto attach'
 Attach.Top = 10
 Attach.Width = 150
-Attach.Caption = 'Attach to Game'
 Attach.ShowHint = false
 Attach.onClick = AttachProcess
+Attach.Caption = 'Re-Attach!'
 
 
+
+-------------
 --------------------
 --
 ---- Loaded
@@ -95,18 +121,9 @@ Loaded.Font.Size=10
 ------------------------------
 ---- END FORM: getMainForm()
 ----
---
 
 --------------------
---
----- CELabel1
---------------------
-Credits = createLabel(CEPanel1)
-Credits.Left = 50
-Credits.Top = 175
-Credits.Caption = ''
-Credits.Font.Size=10
---
+
 ---- Arraylist
 --------------------
 
@@ -115,7 +132,7 @@ ArraylistOnOff.Left = 15
 ArraylistOnOff.Top = 120
 ArraylistOnOff.Caption = 'Show UI'
 ArraylistOnOff.Font.Size=10
-ArraylistOnOff.onChange = showMessage("Thanks to fligger and his Project Genesis Table For the UI ")
+ArraylistOnOff.onChange =off
 
 --------------------
 ------------------------------
@@ -131,5 +148,3 @@ local Pic = createPicture()
 Pic.loadFromStream(IM)
 local Bit = Pic.getBitmap()
 getApplication().Icon = Bit
-
-
