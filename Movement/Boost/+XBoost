@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version:
+  Date   : 2021-07-26
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(XBoost,Minecraft.Windows.exe,F3 0F 11 89 0C 05 00 00 F3) // should be unique
+alloc(newmem,$1000,XBoost)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+0000050C],(float)0.5
+  jmp return
+
+XBoost:
+  jmp newmem
+  nop 3
+return:
+registersymbol(XBoost)
+
+[DISABLE]
+
+XBoost:
+  db F3 0F 11 89 0C 05 00 00
+
+unregistersymbol(XBoost)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - XBoostION POINT: Minecraft.Windows.exe+1DE8665
+
+Minecraft.Windows.exe+1DE8643: 0F 57 D2                 - xorps xmm2,xmm2
+Minecraft.Windows.exe+1DE8646: F3 0F 10 2D 72 46 7E 01  - movss xmm5,[Minecraft.Windows.exe+35CCCC0]
+Minecraft.Windows.exe+1DE864E: 0F 28 C1                 - movaps xmm0,xmm1
+Minecraft.Windows.exe+1DE8651: 0F 54 C4                 - andps xmm0,xmm4
+Minecraft.Windows.exe+1DE8654: 0F 2F C5                 - comiss xmm0,xmm5
+Minecraft.Windows.exe+1DE8657: 77 05                    - ja Minecraft.Windows.exe+1DE865E
+Minecraft.Windows.exe+1DE8659: 0F 57 C0                 - xorps xmm0,xmm0
+Minecraft.Windows.exe+1DE865C: EB 03                    - jmp Minecraft.Windows.exe+1DE8661
+Minecraft.Windows.exe+1DE865E: 0F 28 C3                 - movaps xmm0,xmm3
+Minecraft.Windows.exe+1DE8661: F3 0F 59 C8              - mulss xmm1,xmm0
+// ---------- XBoostING HERE ----------
+Minecraft.Windows.exe+1DE8665: F3 0F 11 89 0C 05 00 00  - movss [rcx+0000050C],xmm1
+// ---------- DONE XBoostING  ----------
+Minecraft.Windows.exe+1DE866D: F3 0F 10 89 14 05 00 00  - movss xmm1,[rcx+00000514]
+Minecraft.Windows.exe+1DE8675: 0F 28 C1                 - movaps xmm0,xmm1
+Minecraft.Windows.exe+1DE8678: 0F 54 C4                 - andps xmm0,xmm4
+Minecraft.Windows.exe+1DE867B: 0F 2F C5                 - comiss xmm0,xmm5
+Minecraft.Windows.exe+1DE867E: 76 03                    - jna Minecraft.Windows.exe+1DE8683
+Minecraft.Windows.exe+1DE8680: 0F 28 D3                 - movaps xmm2,xmm3
+Minecraft.Windows.exe+1DE8683: F3 0F 59 CA              - mulss xmm1,xmm2
+Minecraft.Windows.exe+1DE8687: F3 0F 11 89 14 05 00 00  - movss [rcx+00000514],xmm1
+Minecraft.Windows.exe+1DE868F: C3                       - ret
+Minecraft.Windows.exe+1DE8690: 40 53                    - push rbx
+}
