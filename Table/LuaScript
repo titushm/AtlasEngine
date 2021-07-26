@@ -1,3 +1,11 @@
+local int = getInternet()
+local ICO = int.getURL("https://cdn.discordapp.com/attachments/721278292019118102/867141796085628958/AtlasClientIcon64.png")
+local IM = createStringStream(ICO)
+int.Destroy()
+local Pic = createPicture()
+Pic.loadFromStream(IM)
+local Bit = Pic.getBitmap()
+getApplication().Icon = Bit
 
 lastSpeed=1;
 
@@ -15,7 +23,6 @@ function checkKeys(timer)
   end
 
 end
-
 
 t=createTimer(nil)
 timer_setInterval(t, 100)
@@ -45,6 +52,9 @@ showMessage("Thanks to fligger and his Project Genesis Table For the UI ")
 end
 
 
+
+
+
 function AttachProcess()
    openProcess(process_name)
 if getProcessIDFromProcessName(PROCESS_NAME) ~= nil then
@@ -60,9 +70,12 @@ end
 
 function ArraylistToggle()
 if ArraylistOnOff.Checked then
-Arraylist.visible = false
+GetAddressList().Control[0].BackgroundColor=0000000
+
 else
-Arraylist.visible = false
+GetAddressList().Control[0].BackgroundColor=16777215
+
+
 end
 end
 PROCESS_NAME = 'minecraft.windows.exe'
@@ -114,8 +127,8 @@ Credits.Height = 25
 Credits.Caption = 'Credits'
 Credits.onClick = UICredits
 --------------------
---
----- Attach
+------
+
 --------------------
 Attach = createButton(CEPanel1)
 Attach.Left = 15
@@ -154,9 +167,9 @@ Loaded.Font.Size=10
 ArraylistOnOff = createCheckBox(CEPanel1)
 ArraylistOnOff.Left = 15
 ArraylistOnOff.Top = 120
-ArraylistOnOff.Caption = 'Show UI'
+ArraylistOnOff.Caption = 'Dark Theme'
 ArraylistOnOff.Font.Size=10
-ArraylistOnOff.onChange =off
+ArraylistOnOff.Onchange=ArraylistToggle
 
 --------------------
 ------------------------------
