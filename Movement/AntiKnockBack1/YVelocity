@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-26
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(YVelo,Minecraft.Windows.exe,04 89 81 10 05 00 00) // should be unique
+alloc(newmem,$1000,YVelo)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+00000510],(float)0
+  jmp return
+
+YVelo+01:
+  jmp newmem
+  nop
+return:
+registersymbol(YVelo)
+
+[DISABLE]
+
+YVelo+01:
+  db 89 81 10 05 00 00
+
+unregistersymbol(YVelo)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1CEECEB
+
+Minecraft.Windows.exe+1CEECD5: C3                 - ret 
+Minecraft.Windows.exe+1CEECD6: E8 E5 BB A6 FE     - call Minecraft.Windows.exe+75A8C0
+Minecraft.Windows.exe+1CEECDB: 90                 - nop 
+Minecraft.Windows.exe+1CEECDC: CC                 - int 3 
+Minecraft.Windows.exe+1CEECDD: CC                 - int 3 
+Minecraft.Windows.exe+1CEECDE: CC                 - int 3 
+Minecraft.Windows.exe+1CEECDF: CC                 - int 3 
+Minecraft.Windows.exe+1CEECE0: 8B 02              - mov eax,[rdx]
+Minecraft.Windows.exe+1CEECE2: 89 81 0C 05 00 00  - mov [rcx+0000050C],eax
+Minecraft.Windows.exe+1CEECE8: 8B 42 04           - mov eax,[rdx+04]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1CEECEB: 89 81 10 05 00 00  - mov [rcx+00000510],eax
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1CEECF1: 8B 42 08           - mov eax,[rdx+08]
+Minecraft.Windows.exe+1CEECF4: 89 81 14 05 00 00  - mov [rcx+00000514],eax
+Minecraft.Windows.exe+1CEECFA: C3                 - ret 
+Minecraft.Windows.exe+1CEECFB: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFC: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFD: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFE: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFF: CC                 - int 3 
+Minecraft.Windows.exe+1CEED00: 48 89 5C 24 18     - mov [rsp+18],rbx
+Minecraft.Windows.exe+1CEED05: 55                 - push rbp
+}
