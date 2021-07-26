@@ -6,16 +6,26 @@
   This script does blah blah blah
 }
 [ENABLE]
-aobscanmodule(Bhop,Minecraft.Windows.exe,c7 40 ? ? ? ? ? 48 83 c4 ? c3 cc cc cc cc 48 89 5c 24)
+aobscanmodule(Bhop,Minecraft.Windows.exe,C7 40 1C 00 00 00 00 48 83 C4 28)
 alloc(newmem,$1000,Bhop)
 
 label(code)
 label(return)
 
-newmem:
+alloc(BhopVal,1)
+registersymbol(BhopVal)
 
+BhopVal:
+  dd (float)0.5
+
+
+newmem:
+//movss xmm0,[rcx+000004EC]
 code:
-  mov [rax+1C],3F000000
+  push ecx
+  mov ecx [BhopVal]
+  mov [rax+1C],ecx
+  pop ecx
   jmp return
 
 Bhop:
@@ -30,3 +40,5 @@ Bhop:
 
 unregistersymbol(Bhop)
 dealloc(newmem)
+dealloc(BhopVal)
+unregistersymbol(BhopVal)
