@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-26
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(FrictionGlide,Minecraft.Windows.exe,F3 41 0F 11 47 04 49 8B 06 49 8B CE FF 90 30) // should be unique
+alloc(newmem,$1000,FrictionGlide)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [r15+04],1
+  jmp return
+
+FrictionGlide:
+  jmp newmem
+  nop
+return:
+registersymbol(FrictionGlide)
+
+[DISABLE]
+
+FrictionGlide:
+  db F3 41 0F 11 47 04
+
+unregistersymbol(FrictionGlide)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1DE855F
+
+Minecraft.Windows.exe+1DE852B: F3 41 0F 10 47 04        - movss xmm0,[r15+04]
+Minecraft.Windows.exe+1DE8531: F3 0F 5C 05 2F 49 7E 01  - subss xmm0,[Minecraft.Windows.exe+35CCE68]
+Minecraft.Windows.exe+1DE8539: F3 41 0F 11 47 04        - movss [r15+04],xmm0
+Minecraft.Windows.exe+1DE853F: 49 8B 06                 - mov rax,[r14]
+Minecraft.Windows.exe+1DE8542: 41 0F 28 C9              - movaps xmm1,xmm9
+Minecraft.Windows.exe+1DE8546: 49 8B CE                 - mov rcx,r14
+Minecraft.Windows.exe+1DE8549: FF 90 58 02 00 00        - call qword ptr [rax+00000258]
+Minecraft.Windows.exe+1DE854F: EB 14                    - jmp Minecraft.Windows.exe+1DE8565
+Minecraft.Windows.exe+1DE8551: F3 41 0F 10 47 04        - movss xmm0,[r15+04]
+Minecraft.Windows.exe+1DE8557: F3 0F 5C 05 A9 4A 7E 01  - subss xmm0,[Minecraft.Windows.exe+35CD008]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1DE855F: F3 41 0F 11 47 04        - movss [r15+04],xmm0
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1DE8565: 49 8B 06                 - mov rax,[r14]
+Minecraft.Windows.exe+1DE8568: 49 8B CE                 - mov rcx,r14
+Minecraft.Windows.exe+1DE856B: FF 90 30 04 00 00        - call qword ptr [rax+00000430]
+Minecraft.Windows.exe+1DE8571: 84 C0                    - test al,al
+Minecraft.Windows.exe+1DE8573: 75 4D                    - jne Minecraft.Windows.exe+1DE85C2
+Minecraft.Windows.exe+1DE8575: 84 DB                    - test bl,bl
+Minecraft.Windows.exe+1DE8577: 75 29                    - jne Minecraft.Windows.exe+1DE85A2
+Minecraft.Windows.exe+1DE8579: 49 8B 06                 - mov rax,[r14]
+Minecraft.Windows.exe+1DE857C: BA 30 00 00 00           - mov edx,00000030
+Minecraft.Windows.exe+1DE8581: 49 8B CE                 - mov rcx,r14
+}
