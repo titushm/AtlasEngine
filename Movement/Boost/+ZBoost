@@ -1,0 +1,63 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-26
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(ZBoost,Minecraft.Windows.exe,F3 0F 11 89 14 05 00 00 C3 40) // should be unique
+alloc(newmem,$1000,ZBoost)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rcx+00000514],(float)0.5
+  jmp return
+
+ZBoost:
+  jmp newmem
+  nop 3
+return:
+registersymbol(ZBoost)
+
+[DISABLE]
+
+ZBoost:
+  db F3 0F 11 89 14 05 00 00
+
+unregistersymbol(ZBoost)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1DE8687
+
+Minecraft.Windows.exe+1DE865E: 0F 28 C3                 - movaps xmm0,xmm3
+Minecraft.Windows.exe+1DE8661: F3 0F 59 C8              - mulss xmm1,xmm0
+Minecraft.Windows.exe+1DE8665: F3 0F 11 89 0C 05 00 00  - movss [rcx+0000050C],xmm1
+Minecraft.Windows.exe+1DE866D: F3 0F 10 89 14 05 00 00  - movss xmm1,[rcx+00000514]
+Minecraft.Windows.exe+1DE8675: 0F 28 C1                 - movaps xmm0,xmm1
+Minecraft.Windows.exe+1DE8678: 0F 54 C4                 - andps xmm0,xmm4
+Minecraft.Windows.exe+1DE867B: 0F 2F C5                 - comiss xmm0,xmm5
+Minecraft.Windows.exe+1DE867E: 76 03                    - jna Minecraft.Windows.exe+1DE8683
+Minecraft.Windows.exe+1DE8680: 0F 28 D3                 - movaps xmm2,xmm3
+Minecraft.Windows.exe+1DE8683: F3 0F 59 CA              - mulss xmm1,xmm2
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1DE8687: F3 0F 11 89 14 05 00 00  - movss [rcx+00000514],xmm1
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1DE868F: C3                       - ret 
+Minecraft.Windows.exe+1DE8690: 40 53                    - push rbx
+Minecraft.Windows.exe+1DE8692: 48 83 EC 50              - sub rsp,50
+Minecraft.Windows.exe+1DE8696: 8B 81 50 03 00 00        - mov eax,[rcx+00000350]
+Minecraft.Windows.exe+1DE869C: 48 8B D9                 - mov rbx,rcx
+Minecraft.Windows.exe+1DE869F: 89 81 4C 03 00 00        - mov [rcx+0000034C],eax
+Minecraft.Windows.exe+1DE86A5: 48 8B 91 20 03 00 00     - mov rdx,[rcx+00000320]
+Minecraft.Windows.exe+1DE86AC: 48 83 FA FF              - cmp rdx,-01
+Minecraft.Windows.exe+1DE86B0: 74 27                    - je Minecraft.Windows.exe+1DE86D9
+Minecraft.Windows.exe+1DE86B2: 48 8B 89 78 03 00 00     - mov rcx,[rcx+00000378]
+}
