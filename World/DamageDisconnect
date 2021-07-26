@@ -1,0 +1,113 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-26
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(XVelo,Minecraft.Windows.exe,89 81 0C 05 00 00 8B 42) // should be unique
+alloc(newmem,$1000,XVelo)
+
+label(code)
+label(return)
+
+aobscanmodule(YVelo,Minecraft.Windows.exe,04 89 81 10 05 00 00) // should be unique
+alloc(newmem,$1000,YVelo)
+
+label(codey)
+label(returny)
+
+aobscanmodule(ZVelo,Minecraft.Windows.exe,89 81 14 05 00 00 C3) // should be unique
+alloc(newmem,$1000,ZVelo)
+
+label(codez)
+label(returnz)
+
+newmem:
+
+newmemy:
+
+newmemz:
+
+code:
+  mov [rcx+0000050C],(float)0
+  jmp return
+
+XVelo:
+  jmp newmem
+  nop
+return:
+registersymbol(XVelo)
+
+codey:
+  mov [rcx+00000510],(float)0
+  jmp return
+
+YVelo+01:
+  jmp newmemy
+  nop
+returny:
+registersymbol(YVelo)
+
+codez:
+  mov [rcx+00000514],(float)0
+  jmp returnz
+
+ZVelo:
+  jmp newmemy
+  nop
+returnz:
+registersymbol(ZVelo)
+
+
+[DISABLE]
+
+XVelo:
+  db 89 81 0C 05 00 00
+
+unregistersymbol(XVelo)
+dealloc(newmem)
+
+YVelo+01:
+  db 89 81 10 05 00 00
+
+unregistersymbol(YVelo)
+dealloc(newmemy)
+
+ZVelo:
+  db 89 81 14 05 00 00
+
+unregistersymbol(ZVelo)
+dealloc(newmemz)
+
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1CEECE2
+
+Minecraft.Windows.exe+1CEECD3: 5E                 - pop rsi
+Minecraft.Windows.exe+1CEECD4: 5D                 - pop rbp
+Minecraft.Windows.exe+1CEECD5: C3                 - ret 
+Minecraft.Windows.exe+1CEECD6: E8 E5 BB A6 FE     - call Minecraft.Windows.exe+75A8C0
+Minecraft.Windows.exe+1CEECDB: 90                 - nop 
+Minecraft.Windows.exe+1CEECDC: CC                 - int 3 
+Minecraft.Windows.exe+1CEECDD: CC                 - int 3 
+Minecraft.Windows.exe+1CEECDE: CC                 - int 3 
+Minecraft.Windows.exe+1CEECDF: CC                 - int 3 
+Minecraft.Windows.exe+1CEECE0: 8B 02              - mov eax,[rdx]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1CEECE2: 89 81 0C 05 00 00  - mov [rcx+0000050C],eax
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1CEECE8: 8B 42 04           - mov eax,[rdx+04]
+Minecraft.Windows.exe+1CEECEB: 89 81 10 05 00 00  - mov [rcx+00000510],eax
+Minecraft.Windows.exe+1CEECF1: 8B 42 08           - mov eax,[rdx+08]
+Minecraft.Windows.exe+1CEECF4: 89 81 14 05 00 00  - mov [rcx+00000514],eax
+Minecraft.Windows.exe+1CEECFA: C3                 - ret 
+Minecraft.Windows.exe+1CEECFB: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFC: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFD: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFE: CC                 - int 3 
+Minecraft.Windows.exe+1CEECFF: CC                 - int 3 
+}
