@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>2629</ID>
+      <Description>"LPVelZ"</Description>
+      <LastState Value="0" Activated="1" RealAddress="1A8C94C2D94"/>
+      <Color>FF8000</Color>
+      <VariableType>Float</VariableType>
+      <Address>"Minecraft.Windows.exe"+040A4B88</Address>
+      <Offsets>
+        <Offset>514</Offset>
+        <Offset>100</Offset>
+        <Offset>670</Offset>
+        <Offset>130</Offset>
+        <Offset>0</Offset>
+        <Offset>128</Offset>
+        <Offset>10</Offset>
+      </Offsets>
+    </CheatEntry>
+  </CheatEntries>
+</CheatTable>
