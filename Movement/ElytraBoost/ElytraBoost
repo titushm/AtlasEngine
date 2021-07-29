@@ -1,0 +1,12 @@
+{$lua}
+local al = getAddressList()
+local lpvx = al.getMemoryRecordByDescription("LPVelX")
+local lpvy = al.getMemoryRecordByDescription("LPVelY")
+local lpvz = al.getMemoryRecordByDescription("LPVelZ")
+local mp = 1.3
+[ENABLE]
+lpvx.Value = lpvx.Value * mp
+lpvy.Value = lpvy.Value * mp
+lpvz.Value = lpvz.Value * mp
+
+[DISABLE]
