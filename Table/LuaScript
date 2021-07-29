@@ -78,6 +78,17 @@ GetAddressList().Control[0].BackgroundColor=16777215
 
 end
 end
+function GrayToggle()
+if GrayOnOff.Checked then
+GetAddressList().Control[0].BackgroundColor=5592405
+
+else
+GetAddressList().Control[0].BackgroundColor=16777215
+
+
+end
+end
+
 PROCESS_NAME = 'minecraft.windows.exe'
 :: here ::
 Arraylist.setLayeredAttributes(0xFF00FF, 240, 1)
@@ -166,12 +177,20 @@ Loaded.Font.Size=10
 
 ArraylistOnOff = createCheckBox(CEPanel1)
 ArraylistOnOff.Left = 15
-ArraylistOnOff.Top = 120
+ArraylistOnOff.Top = 100
 ArraylistOnOff.Caption = 'Dark Theme'
 ArraylistOnOff.Font.Size=10
 ArraylistOnOff.Onchange=ArraylistToggle
 
 --------------------
+--------------------
+
+GrayOnOff = createCheckBox(CEPanel1)
+GrayOnOff.Left = 15
+GrayOnOff.Top = 120
+GrayOnOff.Caption = 'Dark Gray Theme'
+GrayOnOff.Font.Size=10
+GrayOnOff.Onchange=GrayToggle
 ------------------------------
 ---- END FORM: getMainForm()
 ----
