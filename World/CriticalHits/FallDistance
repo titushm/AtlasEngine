@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>2602</ID>
+      <Description>"FallDistance"</Description>
+      <LastState Activated="1"/>
+      <Color>008000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-29
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(FallDistance,Minecraft.Windows.exe,C7 83 DC 01 00 00 00 00 00 00 48 8B 4C) // should be unique
+alloc(newmem,$1000,FallDistance)
+
+label(code)
+label(return)
+
+
+newmem:
+
+
+
+code:
+  mov [rbx+000001DC],(byte)1
+  jmp return
+
+FallDistance:
+  jmp newmem
+  nop 5
+return:
+registersymbol(FallDistance)
+
+[DISABLE]
+
+FallDistance:
+  db C7 83 DC 01 00 00 00 00 00 00
+
+unregistersymbol(FallDistance)
+dealloc(newmem)
+
+
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1CEA90F
+
+Minecraft.Windows.exe+1CEA8E8: 0F 2F 83 DC 01 00 00           - comiss xmm0,[rbx+000001DC]
+Minecraft.Windows.exe+1CEA8EF: 73 1E                          - jae Minecraft.Windows.exe+1CEA90F
+Minecraft.Windows.exe+1CEA8F1: 48 8B 8B 78 03 00 00           - mov rcx,[rbx+00000378]
+Minecraft.Windows.exe+1CEA8F8: 48 8B 01                       - mov rax,[rcx]
+Minecraft.Windows.exe+1CEA8FB: FF 90 00 09 00 00              - call qword ptr [rax+00000900]
+Minecraft.Windows.exe+1CEA901: 84 C0                          - test al,al
+Minecraft.Windows.exe+1CEA903: 74 31                          - je Minecraft.Windows.exe+1CEA936
+Minecraft.Windows.exe+1CEA905: 33 D2                          - xor edx,edx
+Minecraft.Windows.exe+1CEA907: 48 8B CB                       - mov rcx,rbx
+Minecraft.Windows.exe+1CEA90A: E8 11 35 00 00                 - call Minecraft.Windows.exe+1CEDE20
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1CEA90F: C7 83 DC 01 00 00 00 00 00 00  - mov [rbx+000001DC],00000000
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+1CEA919: 48 8B 4C 24 48                 - mov rcx,[rsp+48]
+Minecraft.Windows.exe+1CEA91E: 48 33 CC                       - xor rcx,rsp
+Minecraft.Windows.exe+1CEA921: E8 1A 73 0D 01                 - call Minecraft.Windows.exe+2DC1C40
+Minecraft.Windows.exe+1CEA926: 48 8B 5C 24 78                 - mov rbx,[rsp+78]
+Minecraft.Windows.exe+1CEA92B: 0F 28 74 24 50                 - movaps xmm6,[rsp+50]
+Minecraft.Windows.exe+1CEA930: 48 83 C4 60                    - add rsp,60
+Minecraft.Windows.exe+1CEA934: 5F                             - pop rdi
+Minecraft.Windows.exe+1CEA935: C3                             - ret 
+Minecraft.Windows.exe+1CEA936: 48 8B 8B 78 03 00 00           - mov rcx,[rbx+00000378]
+Minecraft.Windows.exe+1CEA93D: 45 33 C9                       - xor r9d,r9d
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+</CheatTable>
