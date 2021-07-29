@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>2588</ID>
+      <Description>"LocalPlayer"</Description>
+      <LastState Value="3873518144" RealAddress="1A8C94C2880"/>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"Minecraft.Windows.exe"+041457D8</Address>
+      <Offsets>
+        <Offset>0</Offset>
+        <Offset>C8</Offset>
+        <Offset>20</Offset>
+        <Offset>0</Offset>
+        <Offset>0</Offset>
+      </Offsets>
+    </CheatEntry>
+  </CheatEntries>
+</CheatTable>
