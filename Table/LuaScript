@@ -1,3 +1,179 @@
+function BGRToHex(blue, green, red)
+GetAddressList().Control[0].BackgroundColor= (col)
+ if(red < 0 or red > 255 or green < 0 or green > 255 or blue < 0 or blue > 255) then
+
+ return nil
+ end
+ return string.format("0x%.2X%.2X%.2X", blue,green,red)
+end
+
+--======================================================--
+
+--======================================================--
+function colorMenuClick()
+ fc = createForm()
+ fc.Width = 300
+ fc.Height = 300
+ fc.Position = 'poScreenCenter'
+ fc.Caption = 'Theme Picker'
+ fc.Color = '0x00FFFFFF'
+
+ p = createPanel(fc)
+ p.top = 20
+ p.height = 100
+ p.width = 200
+ p.left = math.floor((fc.width - p.width) / 2)
+ p.color = '0x00000000'
+
+ t1 = createTrackBar(fc)
+ t1.left = 15
+ t1.top = p.height + p.top + 20
+ t1.width = fc.width - t1.left - 80
+ t1.height = 30
+ t1.Max = 255
+ t1.Min = 0
+ t1.position = 0
+ t1.SelStart = 0
+ t1.SelEnd = 0
+
+ t2 = createTrackBar(fc)
+ t2.left = 15
+ t2.top = t1.height + t1.top + 10
+ t2.width = fc.width - t2.left - 80
+ t2.height = 30
+ t2.Max = 255
+ t2.Min = 0
+ t2.position = 0
+ t2.SelStart = 0
+ t2.SelEnd = 0
+
+ t3 = createTrackBar(fc)
+ t3.left = 15
+ t3.top = t2.height + t2.top + 10
+ t3.width = fc.width - t3.left - 80
+ t3.height = 30
+ t3.Max = 255
+ t3.Min = 0
+ t3.position = 0
+ t3.SelStart = 0
+ t3.SelEnd = 0
+
+ BLabel = createLabel(fc)
+ BLabel.top = t1.top
+ BLabel.left = t1.left + t1.width + 12
+ BLabel.caption = 'B : 0'
+ BLabel.font.color = '0x00FF2020'
+ BLabel.font.style = 'fsBold'
+
+ GLabel = createLabel(fc)
+ GLabel.top = t2.top
+ GLabel.left = t2.left + t2.width + 12
+ GLabel.caption = 'G : 0'
+ GLabel.font.color = '0x00009300'
+ GLabel.font.style = 'fsBold'
+
+ RLabel = createLabel(fc)
+ RLabel.top = t3.top
+ RLabel.left = t3.left + t3.width + 12
+ RLabel.caption = 'R : 0'
+ RLabel.font.color = '0x001717FF'
+ RLabel.font.style = 'fsBold'
+
+
+ HxLabel = createLabel(fc)
+ HxLabel.top = t3.top + t3.height + 15
+ HxLabel.left = t3.left
+
+
+ Hx1Label = createLabel(fc)
+ Hx1Label.top = t3.top + t3.height + 7
+ Hx1Label.left = HxLabel.left + HxLabel.width
+ Hx1Label.font.size = 14
+ Hx1Label.font.style = 'fsBold'
+ Hx1Label.caption = ' '
+
+ ExamLabel = createLabel(fc)
+ ExamLabel.top = HxLabel.top + HxLabel.height + 5
+ ExamLabel.left = HxLabel.left
+ ExamLabel.font.size = 8
+
+
+ bgrLabel = createLabel(fc)
+ bgrLabel.top = ExamLabel.top + ExamLabel.height + 3
+ bgrLabel.left = ExamLabel.left
+ bgrLabel.font.size = 8
+
+ smpLabel = createLabel(fc)
+ smpLabel.top = bgrLabel.top + bgrLabel.height + 13
+ smpLabel.left = bgrLabel.left
+ smpLabel.font.size = 8
+
+ smp1Label = createLabel(fc)
+ smp1Label.top = smpLabel.top + smpLabel.height + 13
+ smp1Label.left = smpLabel.left
+ smp1Label.font.size = 8
+
+
+
+ fc.show()
+
+ B = 0
+ G = 0
+ R = 0
+ col = nil
+
+
+
+
+
+ function btbChange(sender)
+
+  B = t1.position
+  G = t2.position
+  R = t3.position
+  BLabel.Caption = 'B :  '..tostring(t1.position)
+  col = BGRToHex(B,G,R)
+  p.color = col
+
+ end
+
+
+
+
+ function gtbChange(sender)
+
+  B = t1.position
+  G = t2.position
+  R = t3.position
+  GLabel.Caption = 'G :  '..tostring(t2.position)
+ col = BGRToHex(B,G,R)
+  p.color = col
+
+ end
+
+ function rtbChange(sender)
+
+  B = t1.position
+  G = t2.position
+  R = t3.position
+  RLabel.Caption = 'R :  '..tostring(t3.position)
+  col = BGRToHex(B,G,R)
+  p.color = col
+
+ end
+
+ t1.onChange = btbChange
+ t2.onChange = gtbChange
+ t3.onChange = rtbChange
+
+
+
+end
+
+
+
+
+
 local int = getInternet()
 local ICO = int.getURL("https://cdn.discordapp.com/attachments/721278292019118102/867141796085628958/AtlasClientIcon64.png")
 local IM = createStringStream(ICO)
@@ -48,7 +224,7 @@ function Dev()
 end
 
 function UICredits()
-showMessage("Thanks to fligger and his Project Genesis Table For the UI ")
+showMessage("Thanks to fligger and His Project Genesis Table For the UI \rAnd Thanks to Corroder For his Lua Colour Picker")
 end
 
 
@@ -72,9 +248,9 @@ function ArraylistToggle()
 if ArraylistOnOff.Checked then
 GetAddressList().Control[0].BackgroundColor=0000000
 
+
 else
 GetAddressList().Control[0].BackgroundColor=16777215
-
 
 end
 end
@@ -204,3 +380,33 @@ local Pic = createPicture()
 Pic.loadFromStream(IM)
 local Bit = Pic.getBitmap()
 getApplication().Icon = Bit
+
+
+local mainForm = getMainForm()
+local colorMenu = createMenuItem(mainForm)
+colorMenu.Caption = Theme
+
+colorMenu.onClick = colorMenuClick
+mainForm.PopupMenu2.Items.insert(15,colorMenu)
+
+local mainMenu = mainForm.Menu.Items
+local miColor
+--Find "Color" item in main menu. Create one if not found.
+for i=0,mainMenu.Count-1 do
+   if mainMenu[i].Name == 'miColor' then miExtra = mainMenu[i] end
+end
+if miColor == nil then
+   miColor = createMenuItem(mainForm)
+   miColor.Name = 'miColor'
+   miColor.Caption = 'Theme'
+   mainMenu.insert(mainMenu.Count-2,miColor)
+end
+
+--==============================================--
+--Add "Check BGR Color" item to "Color" submenu
+--==============================================--
+local miCheckBGRcolor = createMenuItem(miColor)
+miCheckBGRcolor.Caption = 'Custom Theme'
+miCheckBGRcolor.onClick = colorMenuClick
+miColor.add(miCheckBGRcolor)
+----
