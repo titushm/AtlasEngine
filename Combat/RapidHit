@@ -1,7 +1,7 @@
 { Game   : Minecraft.Windows.exe
   Version: 
-  Date   : 2021-07-17
-  Author : Titus
+  Date   : 2021-08-09
+  Author : titus
 
   This script does blah blah blah
 }
@@ -17,8 +17,8 @@ label(return)
 newmem:
 
 code:
-  cmp byte ptr [rbx+50],01
-  je Minecraft.Windows.exe+14CE944
+  mov [rbx+50],00
+  je Minecraft.Windows.exe+14CE8B4
   jmp return
 
 RapidHit:
@@ -36,29 +36,29 @@ unregistersymbol(RapidHit)
 dealloc(newmem)
 
 {
-// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+14CE8CB
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+14CE83B
 
-Minecraft.Windows.exe+14CE8A6: 48 8B 01              - mov rax,[rcx]
-Minecraft.Windows.exe+14CE8A9: 48 8D 55 D8           - lea rdx,[rbp-28]
-Minecraft.Windows.exe+14CE8AD: FF 50 48              - call qword ptr [rax+48]
-Minecraft.Windows.exe+14CE8B0: 85 C0                 - test eax,eax
-Minecraft.Windows.exe+14CE8B2: 0F 88 0C 05 00 00     - js Minecraft.Windows.exe+14CEDC4
-Minecraft.Windows.exe+14CE8B8: 44 39 7D D8           - cmp [rbp-28],r15d
-Minecraft.Windows.exe+14CE8BC: 74 06                 - je Minecraft.Windows.exe+14CE8C4
-Minecraft.Windows.exe+14CE8BE: 41 8B FE              - mov edi,r14d
-Minecraft.Windows.exe+14CE8C1: 45 8B F4              - mov r14d,r12d
-Minecraft.Windows.exe+14CE8C4: 48 8D 35 FD 69 8C 02  - lea rsi,[Minecraft.Windows.exe+3D952C8]
+Minecraft.Windows.exe+14CE816: 48 8B 01              - mov rax,[rcx]
+Minecraft.Windows.exe+14CE819: 48 8D 55 D8           - lea rdx,[rbp-28]
+Minecraft.Windows.exe+14CE81D: FF 50 48              - call qword ptr [rax+48]
+Minecraft.Windows.exe+14CE820: 85 C0                 - test eax,eax
+Minecraft.Windows.exe+14CE822: 0F 88 0C 05 00 00     - js Minecraft.Windows.exe+14CED34
+Minecraft.Windows.exe+14CE828: 44 39 7D D8           - cmp [rbp-28],r15d
+Minecraft.Windows.exe+14CE82C: 74 06                 - je Minecraft.Windows.exe+14CE834
+Minecraft.Windows.exe+14CE82E: 41 8B FE              - mov edi,r14d
+Minecraft.Windows.exe+14CE831: 45 8B F4              - mov r14d,r12d
+Minecraft.Windows.exe+14CE834: 48 8D 35 8D 6A 8C 02  - lea rsi,[Minecraft.Windows.exe+3D952C8]
 // ---------- INJECTING HERE ----------
-Minecraft.Windows.exe+14CE8CB: 80 7B 50 00           - cmp byte ptr [rbx+50],00
+Minecraft.Windows.exe+14CE83B: 80 7B 50 00           - cmp byte ptr [rbx+50],00
 // ---------- DONE INJECTING  ----------
-Minecraft.Windows.exe+14CE8CF: 74 73                 - je Minecraft.Windows.exe+14CE944
-Minecraft.Windows.exe+14CE8D1: 85 FF                 - test edi,edi
-Minecraft.Windows.exe+14CE8D3: 0F 85 D9 00 00 00     - jne Minecraft.Windows.exe+14CE9B2
-Minecraft.Windows.exe+14CE8D9: 40 88 7B 50           - mov [rbx+50],dil
-Minecraft.Windows.exe+14CE8DD: 48 8B 7B 20           - mov rdi,[rbx+20]
-Minecraft.Windows.exe+14CE8E1: E8 8A 37 23 FF        - call Minecraft.Windows.exe+702070
-Minecraft.Windows.exe+14CE8E6: 48 8B 08              - mov rcx,[rax]
-Minecraft.Windows.exe+14CE8E9: 4C 8B 41 08           - mov r8,[rcx+08]
-Minecraft.Windows.exe+14CE8ED: BA 20 00 00 00        - mov edx,00000020
-Minecraft.Windows.exe+14CE8F2: 48 8B C8              - mov rcx,rax
+Minecraft.Windows.exe+14CE83F: 74 73                 - je Minecraft.Windows.exe+14CE8B4
+Minecraft.Windows.exe+14CE841: 85 FF                 - test edi,edi
+Minecraft.Windows.exe+14CE843: 0F 85 D9 00 00 00     - jne Minecraft.Windows.exe+14CE922
+Minecraft.Windows.exe+14CE849: 40 88 7B 50           - mov [rbx+50],dil
+Minecraft.Windows.exe+14CE84D: 48 8B 7B 20           - mov rdi,[rbx+20]
+Minecraft.Windows.exe+14CE851: E8 1A 38 23 FF        - call Minecraft.Windows.exe+702070
+Minecraft.Windows.exe+14CE856: 48 8B 08              - mov rcx,[rax]
+Minecraft.Windows.exe+14CE859: 4C 8B 41 08           - mov r8,[rcx+08]
+Minecraft.Windows.exe+14CE85D: BA 20 00 00 00        - mov edx,00000020
+Minecraft.Windows.exe+14CE862: 48 8B C8              - mov rcx,rax
 }
