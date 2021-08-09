@@ -1,0 +1,10 @@
+{$lua}
+local al = getAddressList()
+local Phase = al.getMemoryRecordByDescription("PhaseReset")
+[ENABLE]
+
+Phase.Value = 0
+
+
+[DISABLE]
+Phase.Value = Phase.Value + 1.79999542
