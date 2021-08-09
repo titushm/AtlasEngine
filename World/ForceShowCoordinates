@@ -1,0 +1,64 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-08-09
+  Author : titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(ForceShowCoords,Minecraft.Windows.exe,09 00 00 48 85 C0 74 0D 80 78 04 00 74 07) // should be unique
+alloc(newmem,$1000,ForceShowCoords)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rax+04],(byte)1
+  je Minecraft.Windows.exe+BACCB0
+  jmp return
+
+ForceShowCoords+08:
+  jmp newmem
+  nop
+return:
+registersymbol(ForceShowCoords)
+
+[DISABLE]
+
+ForceShowCoords+08:
+  db 80 78 04 00 74 07
+
+unregistersymbol(ForceShowCoords)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+BACCA3
+
+Minecraft.Windows.exe+BACC79: 48 8B 48 08                    - mov rcx,[rax+08]
+Minecraft.Windows.exe+BACC7D: 48 B8 A3 8B 2E BA E8 A2 8B 2E  - mov rax,2E8BA2E8BA2E8BA3
+Minecraft.Windows.exe+BACC87: 48 2B CA                       - sub rcx,rdx
+Minecraft.Windows.exe+BACC8A: 48 C1 F9 04                    - sar rcx,04
+Minecraft.Windows.exe+BACC8E: 48 0F AF C8                    - imul rcx,rax
+Minecraft.Windows.exe+BACC92: 83 F9 0E                       - cmp ecx,0E
+Minecraft.Windows.exe+BACC95: 7E 19                          - jle Minecraft.Windows.exe+BACCB0
+Minecraft.Windows.exe+BACC97: 48 8D 82 A0 09 00 00           - lea rax,[rdx+000009A0]
+Minecraft.Windows.exe+BACC9E: 48 85 C0                       - test rax,rax
+Minecraft.Windows.exe+BACCA1: 74 0D                          - je Minecraft.Windows.exe+BACCB0
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+BACCA3: 80 78 04 00                    - cmp byte ptr [rax+04],00
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+BACCA7: 74 07                          - je Minecraft.Windows.exe+BACCB0
+Minecraft.Windows.exe+BACCA9: B0 01                          - mov al,01
+Minecraft.Windows.exe+BACCAB: 48 83 C4 28                    - add rsp,28
+Minecraft.Windows.exe+BACCAF: C3                             - ret 
+Minecraft.Windows.exe+BACCB0: 32 C0                          - xor al,al
+Minecraft.Windows.exe+BACCB2: 48 83 C4 28                    - add rsp,28
+Minecraft.Windows.exe+BACCB6: C3                             - ret 
+Minecraft.Windows.exe+BACCB7: CC                             - int 3 
+Minecraft.Windows.exe+BACCB8: CC                             - int 3 
+Minecraft.Windows.exe+BACCB9: CC                             - int 3 
+}
