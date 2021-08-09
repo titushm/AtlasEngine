@@ -2,17 +2,18 @@
 <CheatTable>
   <CheatEntries>
     <CheatEntry>
-      <ID>2588</ID>
-      <Description>"LocalPlayer"</Description>
-      <LastState Value="3873518144" RealAddress="1A8C94C2880"/>
+      <ID>2735</ID>
+      <Description>"LocalPlayer(1.17.11)"</Description>
       <VariableType>4 Bytes</VariableType>
-      <Address>"Minecraft.Windows.exe"+041457D8</Address>
+      <Address>"Minecraft.Windows.exe"+040A4B88</Address>
       <Offsets>
         <Offset>0</Offset>
-        <Offset>C8</Offset>
-        <Offset>20</Offset>
+        <Offset>100</Offset>
+        <Offset>670</Offset>
+        <Offset>130</Offset>
         <Offset>0</Offset>
-        <Offset>0</Offset>
+        <Offset>128</Offset>
+        <Offset>10</Offset>
       </Offsets>
     </CheatEntry>
   </CheatEntries>
