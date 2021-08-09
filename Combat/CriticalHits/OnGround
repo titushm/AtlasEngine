@@ -1,0 +1,70 @@
+{ Game   : Minecraft.Windows.exe
+  Version: 
+  Date   : 2021-07-29
+  Author : Titus
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(OnGround,Minecraft.Windows.exe,88 90 E0 01 00 00 C3) // should be unique
+alloc(newmem,$1000,OnGround)
+
+label(code)
+label(return)
+
+
+newmem:
+
+
+
+code:
+  mov [rax+000001E0],0
+  jmp return
+
+OnGround:
+  jmp newmem
+  nop
+
+return:
+
+registersymbol(OnGround)
+
+
+[DISABLE]
+
+OnGround:
+  db 88 90 E0 01 00 00
+
+
+unregistersymbol(OnGround)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Minecraft.Windows.exe+1135384
+
+Minecraft.Windows.exe+113536E: CC                    - int 3 
+Minecraft.Windows.exe+113536F: CC                    - int 3 
+Minecraft.Windows.exe+1135370: 48 8B 41 10           - mov rax,[rcx+10]
+Minecraft.Windows.exe+1135374: 0F B6 80 E1 01 00 00  - movzx eax,byte ptr [rax+000001E1]
+Minecraft.Windows.exe+113537B: C3                    - ret 
+Minecraft.Windows.exe+113537C: CC                    - int 3 
+Minecraft.Windows.exe+113537D: CC                    - int 3 
+Minecraft.Windows.exe+113537E: CC                    - int 3 
+Minecraft.Windows.exe+113537F: CC                    - int 3 
+Minecraft.Windows.exe+1135380: 48 8B 41 10           - mov rax,[rcx+10]
+// ---------- INJECTING HERE ----------
+Minecraft.Windows.exe+1135384: 88 90 E0 01 00 00     - mov [rax+000001E0],dl
+// ---------- DONE INJECTING  ----------
+Minecraft.Windows.exe+113538A: C3                    - ret 
+Minecraft.Windows.exe+113538B: CC                    - int 3 
+Minecraft.Windows.exe+113538C: CC                    - int 3 
+Minecraft.Windows.exe+113538D: CC                    - int 3 
+Minecraft.Windows.exe+113538E: CC                    - int 3 
+Minecraft.Windows.exe+113538F: CC                    - int 3 
+Minecraft.Windows.exe+1135390: 48 8B 41 10           - mov rax,[rcx+10]
+Minecraft.Windows.exe+1135394: 0F B6 80 E0 01 00 00  - movzx eax,byte ptr [rax+000001E0]
+Minecraft.Windows.exe+113539B: C3                    - ret 
+Minecraft.Windows.exe+113539C: CC                    - int 3 
+}
