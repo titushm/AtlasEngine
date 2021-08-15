@@ -1,25 +1,3 @@
-getMainForm().Splitter1.Visible = state
-  getMainForm().Panel4.Visible    = state
-  getMainForm().Panel5.Visible    = state
-
-function cycleFullCompact()
-  local state = not(compactmenuitem.Caption == 'Compact View Mode')
-  compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'
-  getMainForm().Splitter1.Visible = state
-  getMainForm().Panel4.Visible    = state
-  getMainForm().Panel5.Visible    = state
-end
-
-function addCompactMenu()
-  if compactmenualreadyexists then return end
-  local parent = getMainForm().Menu.Items
-  compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem)
-  compactmenuitem.Caption = 'Compact View Mode'
-  compactmenuitem.OnClick = cycleFullCompact
-  compactmenualreadyexists = 'yes'
-end
-
-addCompactMenu()
 
 function BGRToHex(blue, green, red)
 GetAddressList().Control[0].BackgroundColor= (col)
@@ -299,7 +277,7 @@ Arraylist.visible = false
 --
 ---- getMainForm()
 --------------------
---function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel4.Visible    = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel4.Visible    = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
 getMainForm().caption = "AtlasClient by TitusHM#0016"
 
 
