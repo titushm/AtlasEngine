@@ -49,7 +49,7 @@ timer_setEnabled(t, false)
       <ID>11</ID>
       <Description>"Combat"</Description>
       <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
-      <LastState Value="" Activated="1" RealAddress="00000000"/>
+      <LastState Value="" RealAddress="00000000"/>
       <ShowAsSigned>0</ShowAsSigned>
       <Color>0000FF</Color>
       <GroupHeader>1</GroupHeader>
@@ -134,7 +134,6 @@ unregistersymbol(HitboxVal)
         <CheatEntry>
           <ID>17116</ID>
           <Description>"Reach"</Description>
-          <LastState Value="7" RealAddress="7FF77FE7D5C0"/>
           <ShowAsSigned>0</ShowAsSigned>
           <Color>0000FF</Color>
           <VariableType>Float</VariableType>
@@ -546,7 +545,7 @@ Minecraft.Windows.exe+118D89C: CC                    - int 3
       <ID>21</ID>
       <Description>"Movement"</Description>
       <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
-      <LastState Value="" Activated="1" RealAddress="00000000"/>
+      <LastState Value="" RealAddress="00000000"/>
       <ShowAsSigned>0</ShowAsSigned>
       <Color>FF8000</Color>
       <GroupHeader>1</GroupHeader>
@@ -4062,13 +4061,70 @@ timer_setEnabled(tb, false)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
+        <CheatEntry>
+          <ID>17275</ID>
+          <Description>"Air Speed Hop"</Description>
+          <Options moHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+          <LastState/>
+          <Color>FF8000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+aobscanmodule(AirSpeed,Minecraft.Windows.exe,F3 0F 11 88 D8 07 00 00)
+alloc(newmem,$1000,AirSpeed)
+
+label(code)
+label(return)
+
+alloc(AirSpeedVal,1)
+registersymbol(AirSpeedVal)
+
+AirSpeedVal:
+  dd (float)0.01999999955
+
+newmem:
+
+code:
+  push ebx
+  mov ebx [AirSpeedVal]
+   mov [rax+000007D8],ebx
+  pop ebx
+  jmp return
+
+AirSpeed:
+  jmp newmem
+  nop 3
+return:
+registersymbol(AirSpeed)
+
+[DISABLE]
+AirSpeed:
+  db F3 0F 11 88 D8 07 00 00
+
+unregistersymbol(AirSpeed)
+dealloc(newmem)
+dealloc(AirSpeedVal)
+unregistersymbol(AirSpeedVal)
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>17276</ID>
+              <Description>"Speed Value"</Description>
+              <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FF8000</Color>
+              <VariableType>Float</VariableType>
+              <Address>AirSpeedVal</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>16</ID>
       <Description>"World"</Description>
       <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
-      <LastState Value="" Activated="1" RealAddress="00000000"/>
+      <LastState Value="" RealAddress="00000000"/>
       <ShowAsSigned>0</ShowAsSigned>
       <Color>008000</Color>
       <GroupHeader>1</GroupHeader>
@@ -4402,15 +4458,6 @@ off.active = true
 [DISABLE]
 off.active = false
 </AssemblerScript>
-              <Hotkeys>
-                <Hotkey>
-                  <Action>Activate</Action>
-                  <Keys>
-                    <Key>78</Key>
-                  </Keys>
-                  <ID>0</ID>
-                </Hotkey>
-              </Hotkeys>
               <CheatEntries>
                 <CheatEntry>
                   <ID>16670</ID>
@@ -4464,15 +4511,6 @@ off.active = true
 [DISABLE]
 off.active = false
 </AssemblerScript>
-              <Hotkeys>
-                <Hotkey>
-                  <Action>Activate</Action>
-                  <Keys>
-                    <Key>77</Key>
-                  </Keys>
-                  <ID>0</ID>
-                </Hotkey>
-              </Hotkeys>
               <CheatEntries>
                 <CheatEntry>
                   <ID>16673</ID>
@@ -4978,6 +5016,16 @@ dealloc(newmem)
 dealloc(HungerVal)
 unregistersymbol(HungerVal)
 </AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>17277</ID>
+              <Description>"Hunger Value"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>008000</Color>
+              <VariableType>Float</VariableType>
+              <Address>HungerVal</Address>
+            </CheatEntry>
+          </CheatEntries>
         </CheatEntry>
         <CheatEntry>
           <ID>17238</ID>
@@ -5393,7 +5441,7 @@ unregistersymbol(XPVal)
       <ID>13</ID>
       <Description>"Visual"</Description>
       <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
-      <LastState Value="" Activated="1" RealAddress="00000000"/>
+      <LastState Value="" RealAddress="00000000"/>
       <ShowAsSigned>0</ShowAsSigned>
       <Color>FF0080</Color>
       <GroupHeader>1</GroupHeader>
@@ -7236,7 +7284,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
               <ID>363</ID>
               <Description>"Reach(.220)"</Description>
               <Options moHideChildren="1"/>
-              <LastState Value="7.113588294E-37" RealAddress="7FF77F8CD0E8"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+2FED0E8</Address>
@@ -7244,7 +7291,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
                 <CheatEntry>
                   <ID>364</ID>
                   <Description>"Reset Reach"</Description>
-                  <LastState Value="7.113588294E-37" RealAddress="7FF77F8CD0E8"/>
                   <VariableType>Float</VariableType>
                   <Address>Minecraft.Windows.exe+2FED0E8</Address>
                 </CheatEntry>
@@ -7253,7 +7299,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>365</ID>
               <Description>"Reach(.221)"</Description>
-              <LastState Value="-1.009517467E-28" RealAddress="7FF77F8CD138"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+2FED138</Address>
@@ -7261,7 +7306,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>366</ID>
               <Description>"Reach (1.17)"</Description>
-              <LastState Value="2.759284771E20" RealAddress="7FF77FDE0E98"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+3500E98</Address>
@@ -7269,7 +7313,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>367</ID>
               <Description>"Reach (1.17.02)"</Description>
-              <LastState Value="3.013290673E29" RealAddress="7FF77FDE0ED0"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+3500ED0</Address>
@@ -7277,7 +7320,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>265</ID>
               <Description>"Reach (1.17.02)"</Description>
-              <LastState Value="3.013290673E29" RealAddress="7FF77FDE0ED0"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+3500ED0</Address>
@@ -7357,7 +7399,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>197</ID>
               <Description>"Reach (1.17)"</Description>
-              <LastState Value="2.759284771E20" RealAddress="7FF77FDE0E98"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+3500E98</Address>
@@ -7365,7 +7406,6 @@ Minecraft.Windows.exe+1433CA2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>352</ID>
               <Description>"Reach (1.17.10)"</Description>
-              <LastState Value="1.483094077E-38" RealAddress="7FF77FEADB78"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+35CDB78</Address>
@@ -7445,7 +7485,6 @@ Minecraft.Windows.exe+14CE8F2: 48 8B C8              - mov rcx,rax
             <CheatEntry>
               <ID>16813</ID>
               <Description>"Reach"</Description>
-              <LastState Value="4.06168375E-31" RealAddress="7FF77FE7D5D0"/>
               <Color>0000FF</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+359D5D0</Address>
@@ -8332,7 +8371,6 @@ Minecraft.Windows.exe+1C5173B: CC                    - int 3
             <CheatEntry>
               <ID>383</ID>
               <Description>"NoBlockFall (1.17.02)"</Description>
-              <LastState Value="3.013290673E29" RealAddress="7FF77FDE0ED0"/>
               <Color>FF8000</Color>
               <VariableType>Float</VariableType>
               <Address>Minecraft.Windows.exe+3500ED0</Address>
